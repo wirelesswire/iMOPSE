@@ -1,0 +1,3424 @@
+optimizer\out\build\x64-Debug\CMakeFiles\ShowIncludes\foo.h
+=============
+
+
+
+optimizer\out\build\x64-Release\CMakeFiles\ShowIncludes\foo.h
+=============
+
+
+
+optimizer\src\CProgram.h
+=============
+#pragma once
+
+#include <string>
+#include "SProgramParams.h"
+
+/**
+ * @brief Class representing the main program.
+ * 
+ * CProgram is responsible for executing the main logic of the application.
+ * It utilizes the SProgramParams structure to configure and run the program.
+ */
+class CProgram
+{
+public:
+    /**
+     * @brief Executes the main program logic.
+     * 
+     * This static method takes program parameters and performs the core
+     * functionality of the application. It may involve initializing
+     * components, setting up environments, running optimization routines,
+     * or other tasks as defined in the implementation.
+     * 
+     * @param programParams A constant reference to SProgramParams struct.
+     *                      This struct contains configuration and parameters
+     *                      required for program execution.
+     */
+    static void Run(const SProgramParams &programParams);
+};
+
+optimizer\src\SProgramParams.h
+=============
+#pragma once
+
+/*
+* Program entry params
+*/
+struct SProgramParams
+{
+    // Path to the method configuration
+    char *m_MethodConfigPath;
+
+    // Problem to solve codename (examples: GA, TS, SA, NSGAII, NTGA2)
+    char *m_ProblemName;
+
+    // Path to the problem instance definition
+    char *m_ProblemInstancePath;
+
+    // <Optional> Number of executions (runs) per instance
+    int m_ExecutionsCount;
+
+    // <Optional> Seed for random generation
+    int m_Seed;
+};
+
+optimizer\src\factories\method\CMethodFactory.h
+=============
+#pragma once
+
+#include "../../problem/AProblem.h"
+#include "../../method/AMethod.h"
+#include "../../method/configMap/SConfigMap.h"
+
+class CMethodFactory
+{
+public:
+    static AMethod *CreateMethod(
+            const char *optimizerConfigPath,
+            AProblem &problem
+    );
+    static void DeleteObjects();
+private:
+    static SConfigMap *configMap;
+    static AInitialization *initialization;
+    static ACrossover *crossover;
+    static AMutation *mutation;
+};
+
+
+optimizer\src\factories\method\configMap\CConfigFactory.h
+=============
+
+#pragma once
+
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include "../../../method/configMap/SConfigMap.h"
+
+class CConfigFactory
+{
+public:
+    static SConfigMap *CreateConfigMap(const char *path);
+};
+
+
+optimizer\src\factories\method\methods\MO\ANTGA\CANTGAFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/configMap/SConfigMap.h"
+#include "../../../../../method/methods/MO/ANTGA/CANTGA.h"
+
+class CANTGAFactory
+{
+public:
+    static CANTGA* CreateANTGA(SConfigMap* configMap, AProblem& problem, AInitialization* initialization,
+                               ACrossover* crossover,
+                               AMutation* mutation);
+    static void DeleteObjects();
+private:
+    static CGapSelectionByRandomDim* gapSelectionByRandomDim;
+};
+
+
+optimizer\src\factories\method\methods\MO\BNTGA\CBNTGAFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/MO/NSGAII/CNSGAII.h"
+#include "../../../../../method/configMap/SConfigMap.h"
+#include "../../../../../method/methods/MO/BNTGA/CBNTGA.h"
+
+class CBNTGAFactory
+{
+public:
+    static CBNTGA *CreateBNTGA(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,
+                               ACrossover *crossover,
+                               AMutation *mutation);
+    static void DeleteObjects();
+private:
+    static CGapSelectionByRandomDim *gapSelectionByRandomDim;
+};
+
+
+optimizer\src\factories\method\methods\MO\MOEAD\CMOEADFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/MO/NSGAII/CNSGAII.h"
+#include "../../../../../method/configMap/SConfigMap.h"
+#include "../../../../../method/methods/MO/MOEAD/CMOEAD.h"
+
+class CMOEADFactory
+{
+public:
+    static CMOEAD *CreateMOEAD(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,
+                                 ACrossover *crossover,
+                                 AMutation *mutation);
+    static void DeleteObjects();
+};
+
+
+optimizer\src\factories\method\methods\MO\NSGAII\CNSGAIIFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/MO/NSGAII/CNSGAII.h"
+#include "../../../../../method/configMap/SConfigMap.h"
+
+class CNSGAIIFactory
+{
+public:
+    static CNSGAII *CreateNSGAII(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,
+                                 ACrossover *crossover,
+                                 AMutation *mutation);
+    static void DeleteObjects();
+private:
+    static CRankedTournament *rankedTournament;
+};
+
+
+optimizer\src\factories\method\methods\MO\NTGA2\CNTGA2Factory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/MO/NTGA2/CNTGA2.h"
+
+class CNTGA2Factory
+{
+public:
+    static CNTGA2 *CreateNTGA2(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,
+                               ACrossover *crossover,
+                               AMutation *mutation);
+    static void DeleteObjects();
+private:
+    static CRankedTournament *rankedTournament;
+    static CGapSelectionByRandomDim *gapSelectionByRandomDim;
+};
+
+
+optimizer\src\factories\method\methods\MO\NTGA2_ALNS\CNTGA2_ALNSFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/MO/NTGA2_ALNS/CNTGA2_ALNS.h"
+
+class CNTGA2_ALNSFactory
+{
+public:
+    static CNTGA2_ALNS *CreateNTGA2_ALNS(SConfigMap *configMap
+        , AProblem &problem
+        , AInitialization *initialization
+        , ACrossover *crossover
+        , AMutation *mutation
+        , std::vector<AMutation*>* alnsRemovalMutations
+        , std::vector<AMutation*>* alnsInsertionMutations);
+    static void DeleteObjects();
+private:
+    static CRankedTournament *rankedTournament;
+    static CGapSelectionByRandomDim *gapSelectionByRandomDim;
+    static std::vector<AMutation*>* s_alnsRemovalMutations;
+    static std::vector<AMutation*>* s_alnsInsertionMutations;
+};
+
+
+optimizer\src\factories\method\methods\MO\SPEA2\CSPEA2Factory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/MO/SPEA2/CSPEA2.h"
+
+class CSPEA2Factory
+{
+public:
+    static CSPEA2 *CreateSPEA2(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,
+                               ACrossover *crossover,
+                               AMutation *mutation);
+    static void DeleteObjects();
+};
+
+
+optimizer\src\factories\method\methods\SO\ACO\CACOFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/SO/ACO/TSP-BASED/CACO_TSP.h"
+
+class CACOFactory
+{
+public:
+    static CACO *CreateACO(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,const char *optimizerConfigPath);
+    static void DeleteObjects();
+private:
+    static std::vector<float> *objectiveWeights;
+};
+
+
+optimizer\src\factories\method\methods\SO\DE\CDEFactory.h
+=============
+#pragma once
+
+#include "../../../../../method/methods/SO/DEGR/CDE.h"
+
+class CDEFactory
+{
+public:
+    static CDE* CreateDE(SConfigMap* configMap, AProblem& problem, AInitialization* initialization);
+    static void DeleteObjects();
+private:
+    static std::vector<float>* objectiveWeights;
+};
+
+
+optimizer\src\factories\method\methods\SO\GA\CGAFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/SO/GA/CGA.h"
+
+class CGAFactory
+{
+public:
+    static CGA *CreateGA(SConfigMap *configMap, AProblem &problem, AInitialization *initialization,
+                         ACrossover *crossover,
+                         AMutation *mutation);
+    static void DeleteObjects();
+private:
+    static std::vector<float> *objectiveWeights;
+    static CFitnessTournament *fitnessTournament;
+};
+
+
+optimizer\src\factories\method\methods\SO\PSO\CPSOFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/SO/PSO/CPSO.h"
+
+class CPSOFactory
+{
+public:
+    static CPSO* CreatePSO(SConfigMap* configMap, AProblem& problem, AInitialization* initialization);
+    static void DeleteObjects();
+private:
+    static std::vector<float>* objectiveWeights;
+};
+
+
+
+optimizer\src\factories\method\methods\SO\SA\CSAFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/SO/SA/CSA.h"
+
+class CSAFactory
+{
+public:
+    static CSA* CreateSA(SConfigMap* configMap, AProblem& problem, AInitialization* initialization);
+    static void DeleteObjects();
+private:
+    static std::vector<float>* objectiveWeights;
+};
+
+optimizer\src\factories\method\methods\SO\TS\CTSFactory.h
+=============
+#pragma once
+
+#include "../../../../../problem/AProblem.h"
+#include "../../../../../method/methods/SO/TS/CTS.h"
+
+class CTSFactory
+{
+public:
+    static CTS* CreateTS(SConfigMap* configMap, AProblem& problem, AInitialization* initialization);
+    static void DeleteObjects();
+private:
+    static std::vector<float>* objectiveWeights;
+};
+
+optimizer\src\factories\method\operators\crossover\CCrossoverFactory.h
+=============
+#pragma once
+
+#include <set>
+#include "../../../../method/operators/crossover/ACrossover.h"
+#include "../../../../method/configMap/SConfigMap.h"
+#include "../../../../problem/AProblem.h"
+
+class CCrossoverFactory
+{
+public:
+    static ACrossover *Create(SConfigMap *configMap, const std::string& configKey, AProblem& problem);
+    static std::set<EEncodingType> GetAllEncodingTypes(const std::vector<SEncodingSection>& encoding);
+};
+
+
+optimizer\src\factories\method\operators\initialization\CInitializationFactory.h
+=============
+#pragma once
+
+#include "method/operators/initialization/AInitialization.h"
+#include "method/configMap/SConfigMap.h"
+
+class AProblem;
+
+class CInitializationFactory
+{
+public:
+    static AInitialization* Create(SConfigMap* configMap, AProblem& problem);
+};
+
+
+optimizer\src\factories\method\operators\mutation\CALNSMutationFactory.h
+=============
+#pragma once
+
+#include "../../../../method/operators/mutation/AMutation.h"
+#include "../../../../method/configMap/SConfigMap.h"
+#include "../../../../problem/AProblem.h"
+#include <vector>
+
+class CALNSMutationFactory
+{
+public:
+    static std::vector<AMutation*>* CreateRemovalOperators(AProblem& problem);
+    static std::vector<AMutation*>* CreateInsertionOperators(AProblem& problem);
+};
+
+
+optimizer\src\factories\method\operators\mutation\CMultiMutationFactory.h
+=============
+#pragma once
+
+#include "method/configMap/SConfigMap.h"
+#include "method/multiOperator/AMultiOperator.h"
+#include "method/operators/mutation/AMutation.h"
+#include "problem/AProblem.h"
+
+class CMultiMutationFactory
+{
+public:
+    static AMultiOperator<AMutation>* Create(SConfigMap* configMap, AProblem& problem);
+};
+
+
+optimizer\src\factories\method\operators\mutation\CMutationFactory.h
+=============
+#pragma once
+
+#include "../../../../method/operators/mutation/AMutation.h"
+#include "../../../../method/configMap/SConfigMap.h"
+#include "../../../../problem/AProblem.h"
+#include <set>
+
+class CMutationFactory
+{
+public:
+    static AMutation *Create(SConfigMap *configMap, const std::string& configKey, AProblem& problem);
+    static std::set<EEncodingType> GetAllEncodingTypes(const std::vector<SEncodingSection>& encoding);
+};
+
+
+optimizer\src\factories\method\operators\selection\CSelectionFactory.h
+=============
+#pragma once
+
+#include "../../../../method/operators/selection/selections/CRankedTournament.h"
+#include "../../../../method/operators/selection/selections/CGapSelectionByRandomDim.h"
+#include "../../../../method/configMap/SConfigMap.h"
+#include "../../../../method/operators/selection/selections/CFitnessTournament.h"
+
+class CSelectionFactory
+{
+public:
+    static CFitnessTournament *CreateFitnessTournamentSelection(SConfigMap *configMap);
+    static CRankedTournament *CreateRankedTournamentSelection(SConfigMap *configMap);
+    static CGapSelectionByRandomDim *CreateGapSelection(SConfigMap *configMap, bool bntga);
+private:
+    static int ValidateSelectionAndReturnTournamentSize(SConfigMap *configMap, std::string selectionName);
+};
+
+optimizer\src\factories\problem\CProblemFactory.h
+=============
+#pragma once
+
+#include "../../problem/AProblem.h"
+
+class CProblemFactory
+{
+public:
+    static AProblem *CreateProblem(const char *problemName, const char *problemConfigurationPath);
+    static void DeleteObjects();
+};
+
+optimizer\src\factories\problem\CVRP\CCVRPFactory.h
+=============
+#pragma once
+
+#include "../../../problem/problems/CVRP/CCVRP.h"
+#include <fstream>
+#include <vector>
+
+class CCVRPFactory {
+public:
+    static CCVRP *CreateCVRP(const char *problemDefinitionPath);
+    static void DeleteObjects();
+private:
+    static const std::string s_Delimiter;
+    static const std::string s_DimensionKey;
+    static const std::string s_CapacityKey;
+    static const std::string s_CitiesSectionKey;
+    static const std::string s_DemandSectionKey;
+    static const std::string s_DepotSectionKey;
+
+    static CCVRPTemplate *cvrpTemplate;
+    static CCVRPTemplate *ReadCVRPTemplate(const char *problemDefinitionPath);
+    static void ReadCitiesAndDemand(std::ifstream& fileStream, int dimension, std::vector<SCityCVRP>& cities) ;
+    static void ReadDepot(std::ifstream& fileStream, std::vector<size_t>& depotIndexes) ;
+};
+
+optimizer\src\factories\problem\ECVRPTW\CECVRPTWFactory.h
+=============
+#pragma once
+
+#include "problem/problems/ECVRPTW/CECVRPTW.h"
+#include <fstream>
+#include <vector>
+
+class CECVRPTWFactory {
+public:
+    static CECVRPTW* CreateECVRPTW(const char* problemDefinitionPath);
+    static void DeleteObjects();
+private:
+    static const std::string s_Delimiter;
+    static const std::string s_CapacityKey;
+    static const std::string s_CitiesSectionKey;
+    static const std::string s_TankCapacityKey;
+    static const std::string s_FuelConsumptionKey;
+    static const std::string s_InverseRefuelingRateKey;
+    static const std::string s_VelocityKey;
+    static const std::string s_VehicleCountKey;
+
+    static CECVRPTWTemplate* cvrpTemplate;
+    static CECVRPTWTemplate* ReadECVRPTWTemplate(const char* problemDefinitionPath);
+    static void ReadCities(std::ifstream& fileStream, int& dimension, std::vector<SCityECVRPTW>& cities);
+};
+
+optimizer\src\factories\problem\MSRCPSP\CMSRCPSP_Factory.h
+=============
+#pragma once
+
+#include <fstream>
+#include "../../../problem/problems/MSRCPSP/CMSRCPSP_TA.h"
+#include "../../../problem/problems/MSRCPSP/CMSRCPSP_TO.h"
+
+class CMSRCPSP_Factory
+{
+public:
+    static CMSRCPSP_TA *CreateMSRCPSP_TA(const char *problemConfigurationPath, size_t objCount);
+    static CMSRCPSP_TO *CreateMSRCPSP_TO(const char* problemConfigurationPath, size_t objCount);
+    
+    static void DeleteObjects();
+private:
+    static const std::string s_Delimiter;
+    static const std::string s_TasksKey;
+    static const std::string s_ResourcesKey;
+    static const std::string s_ResourcesSectionKey;
+    static const std::string s_TasksSectionKey;
+
+    static CScheduler *scheduler;
+
+    static CScheduler *CreateScheduler(const char *problemConfigurationPath);
+    static void ReadResources(std::basic_ifstream<char> &fileStream, int resourcesNumber, std::vector<CResource> &resources);
+    static void ReadTasks(std::basic_ifstream<char> &fileStream, int tasksNumber, std::vector<CTask> &tasks);
+};
+
+optimizer\src\factories\problem\TSP\CTSPFactory.h
+=============
+#pragma once
+
+#include "../../../utils/fileReader/CReadUtils.h"
+#include "../../../problem/problems/TSP/CTSP.h"
+#include <string>
+#include <vector>
+#include <fstream>
+#include <stdexcept>
+
+class CTSPFactory {
+private:
+    static const std::string s_Delimiter;
+    static const std::string s_DimensionKey;
+    static const std::string s_CitiesSectionKey;
+
+    static CTSPTemplate *tspTemplate;
+
+    static void ReadCities(std::ifstream &fileStream, int dimension, std::vector<CCity> &cities) {
+        std::string line;
+        if (!CReadUtils::GotoLineByKey(fileStream, s_CitiesSectionKey, line)) {
+            throw std::runtime_error("Error reading cities for TSP");
+        }
+
+        for (int i = 0; i < dimension; ++i) {
+            if (std::getline(fileStream, line)) {
+                const std::vector<std::string> vec = CReadUtils::SplitLine(line);
+                cities.emplace_back(std::stoi(vec[0]), std::stof(vec[1]), std::stof(vec[2]));
+            }
+        }
+    }
+
+public:
+    static CTSPTemplate* ReadCTSPTemplate(const char *problemDefinitionPath) {
+        auto *result = new CTSPTemplate();
+
+        std::ifstream readFileStream(problemDefinitionPath);
+        int dim = 0;
+        if (!CReadUtils::GotoReadIntegerByKey(readFileStream, s_DimensionKey, s_Delimiter, dim)) {
+            throw std::runtime_error("Error reading dimension for TSP");
+        }
+
+        std::vector<CCity> cities;
+        ReadCities(readFileStream, dim, cities);
+        result->SetCities(cities);
+
+        readFileStream.close();
+        return result;
+    }
+    
+    static CTSP* CreateTSP(const char *problemDefinitionPath) {
+        tspTemplate = ReadCTSPTemplate(problemDefinitionPath);
+        tspTemplate->CalculateMaxDistance();
+        return new CTSP(*tspTemplate);
+    }
+
+    static void DeleteObjects() {
+        delete tspTemplate;
+    }
+};
+
+
+optimizer\src\factories\problem\TTP\CTTPFactory.h
+=============
+#pragma once
+
+#include <fstream>
+#include <vector>
+#include "../../../problem/problems/TTP/CTTP1.h"
+#include "../../../problem/problems/TTP/CTTP2.h"
+#include "../../../problem/problems/TTP/CTTPTemplate.h"
+
+class CTTPFactory
+{
+public:
+    static CTTP1 *CreateTTP1(const char *problemDefinitionPath);
+    static CTTP2 *CreateTTP2(const char *problemDefinitionPath);
+    static void DeleteObjects();
+private:
+    static const std::string s_Delimiter;
+    static const std::string s_DimensionKey;
+    static const std::string s_ItemsCountKey;
+    static const std::string s_CapacityKey;
+    static const std::string s_MinSpeedKey;
+    static const std::string s_MaxSpeedKey;
+    static const std::string s_RentingRatioKey;
+    static const std::string s_CitiesSectionKey;
+    static const std::string s_ItemsSectionKey;
+
+    static CTTPTemplate *ttpTemplate;
+    static CTTPTemplate *ReadTTPTemplate(const char *problemDefinitionPath);
+    static void ReadCities(std::ifstream &fileStream, int dimension, std::vector<SCity> &cities);
+    static void ReadItems(std::ifstream &fileStream, int itemCount, std::vector<SItem> &items);
+};
+
+
+optimizer\src\method\AGeneticMethod.h
+=============
+#pragma once
+
+#pragma once
+
+#include "operators/initialization/AInitialization.h"
+#include "operators/crossover/ACrossover.h"
+#include "operators/mutation/AMutation.h"
+#include "../problem/AProblem.h"
+#include "AMethod.h"
+
+class AGeneticMethod : public AMethod
+{
+public:
+    explicit AGeneticMethod(AProblem& evaluator, AInitialization& initialization,
+        ACrossover& crossover,
+        AMutation& mutation) : m_Crossover(crossover), m_Mutation(mutation), AMethod(evaluator, initialization)
+    {};
+    virtual ~AGeneticMethod() = default;
+    
+protected:
+    size_t m_GenerationLimit = 0;
+    size_t m_PopulationSize = 0;
+    ACrossover& m_Crossover;
+    AMutation& m_Mutation;
+};
+
+
+optimizer\src\method\AMethod.h
+=============
+#pragma once
+
+#include "operators/initialization/AInitialization.h"
+#include "operators/crossover/ACrossover.h"
+#include "operators/mutation/AMutation.h"
+#include "../problem/AProblem.h"
+
+class AMethod
+{
+public:
+    static int m_ExperimentRunCounter;
+
+    explicit AMethod(AProblem &evaluator, AInitialization &initialization) : m_Problem(evaluator), m_Initialization(initialization)
+    {};
+    virtual ~AMethod() = default;
+
+    virtual void RunOptimization() = 0;
+    
+    virtual void Reset() = 0;
+
+protected:
+    AInitialization &m_Initialization;
+    AProblem &m_Problem;
+};
+
+
+optimizer\src\method\SMethodParams.h
+=============
+
+#pragma once
+
+#include <map>
+#include <string>
+#include "configMap/SConfigMap.h"
+
+struct SMethodParams
+{
+    bool m_Silent = false;
+    SConfigMap m_Configuration;
+};
+
+optimizer\src\method\configMap\SConfigMap.h
+=============
+#pragma once
+
+#include <map>
+#include <string>
+
+struct SConfigMap
+{
+public:
+    bool AddLine(const std::string &keyString, const std::string &valueString);
+    bool HasValue(const std::string &paramKey);
+
+    bool TakeValue(const std::string &paramKey, int &outValue);
+    bool TakeValue(const std::string &paramKey, size_t &outValue);
+    bool TakeValue(const std::string &paramKey, float &outValue);
+    bool TakeValue(const std::string &paramKey, double &outValue);
+    bool TakeValue(const std::string &paramKey, std::string &outValue);
+
+    void Clear();
+private:
+    std::map<std::string, std::string> m_ConfigMap;
+};
+
+optimizer\src\method\individual\AIndividual.h
+=============
+#pragma once
+
+#include <vector>
+#include "SGenotype.h"
+
+struct AIndividual
+{
+public:
+    SGenotype m_Genotype;
+    std::vector<float> m_Evaluation;
+    std::vector<float> m_NormalizedEvaluation;
+    bool m_isValid = true;
+    
+protected:
+    AIndividual(SGenotype& genotype, std::vector<float>& evaluation, std::vector<float>& normalizedEvaluation)
+        : m_Genotype(genotype)
+        , m_Evaluation(evaluation)
+        , m_NormalizedEvaluation(normalizedEvaluation)
+    {};
+
+    AIndividual(const AIndividual& other)
+        : m_Genotype(other.m_Genotype)
+        , m_Evaluation(other.m_Evaluation)
+        , m_NormalizedEvaluation(other.m_NormalizedEvaluation)
+    {};
+};
+
+
+optimizer\src\method\individual\SGenotype.h
+=============
+#pragma once
+
+#include <vector>
+#include <cmath>
+
+class SGenotype
+{
+public:
+    SGenotype() = default;
+
+    SGenotype(const SGenotype &other) : m_FloatGenotype(other.m_FloatGenotype), m_IntGenotype(other.m_IntGenotype),
+                                        m_BoolGenotype(other.m_BoolGenotype)
+    {};
+
+    // TODO - why three different genotypes?
+    std::vector<float> m_FloatGenotype;
+    std::vector<int> m_IntGenotype;
+    std::vector<bool> m_BoolGenotype;
+};
+
+
+optimizer\src\method\individual\MO\SMOIndividual.h
+=============
+#pragma once
+
+#include <vector>
+#include <cstddef>
+#include "../AIndividual.h"
+
+class SMOIndividual : public AIndividual
+{
+public:
+    SMOIndividual(SGenotype& genotype, std::vector<float>& evaluation, std::vector<float>& normalizedEvaluation)
+        : AIndividual(genotype, evaluation, normalizedEvaluation)
+    {}
+
+    SMOIndividual(const SMOIndividual& other)
+        : AIndividual(other)
+        , m_MetaInfo(other.m_MetaInfo)
+    {};
+    
+    bool IsDominatedBy(const SMOIndividual* otherSolution) const
+    {
+        // If this has any better value
+        for (int i = 0; i < m_NormalizedEvaluation.size(); ++i)
+        {
+            if (m_NormalizedEvaluation[i] < otherSolution->m_NormalizedEvaluation[i])
+            {
+                return false;
+            }
+        }
+
+        // Now we are sure we have worse or equal values
+
+        // If other has at least one better value
+        for (int i = 0; i < m_NormalizedEvaluation.size(); ++i)
+        {
+            if (otherSolution->m_NormalizedEvaluation[i] < m_NormalizedEvaluation[i])
+            {
+                return true;
+            }
+        }
+
+        // If equal
+        return false;
+    }
+
+    bool IsDuplicateEvalValue(const SMOIndividual* otherSolution) const
+    {
+        for (int i = 0; i < m_NormalizedEvaluation.size(); ++i)
+        {
+            if (otherSolution->m_NormalizedEvaluation[i] != m_NormalizedEvaluation[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    size_t GetSelected() const
+    {
+        return m_Selected;
+    }
+
+    void OnSelected()
+    {
+        m_Selected += 1;
+    }
+
+    size_t m_Rank = 0;
+    float m_CrowdingDistance = 0.0f;
+    std::vector<float> m_MetaInfo;
+private:
+    size_t m_Selected = 0;
+};
+
+optimizer\src\method\individual\SO\SParticle.h
+=============
+#pragma once
+
+#include <vector>
+#include "SSOIndividual.h"
+
+struct SParticle : public SSOIndividual
+{
+public:
+    SParticle(SGenotype &genotype, std::vector<float>& evaluation, std::vector<float>& normalizedEvaluation, std::vector<float>& velocity)
+        : SSOIndividual(genotype, evaluation, normalizedEvaluation), m_Velocity(velocity)
+    {}
+    
+    std::vector<float> m_Velocity;
+    std::vector<float> m_BestKnownPosition;
+    float m_BestKnownFitness = 0;
+};
+
+optimizer\src\method\individual\SO\SSOIndividual.h
+=============
+
+#pragma once
+
+#include <vector>
+#include "../AIndividual.h"
+
+struct SSOIndividual : public AIndividual
+{
+public:
+    SSOIndividual(SGenotype &genotype, std::vector<float>& evaluation, std::vector<float>& normalizedEvaluation)
+            : AIndividual(genotype, evaluation, normalizedEvaluation)
+    {}
+
+    SSOIndividual(const SSOIndividual &other) : AIndividual(other)
+    {};
+    
+    float m_Fitness = 0;
+};
+
+
+optimizer\src\method\methods\MO\AMOGeneticMethod.h
+=============
+#pragma once
+
+#include "../../AMethod.h"
+#include "../../individual/MO/SMOIndividual.h"
+#include "../../AGeneticMethod.h"
+
+class AMOGeneticMethod : public AGeneticMethod
+{
+public:
+    explicit AMOGeneticMethod(AProblem& evaluator, AInitialization& initialization,
+        ACrossover& crossover,
+        AMutation& mutation) : AGeneticMethod(evaluator, initialization, crossover, mutation)
+    {};
+    ~AMOGeneticMethod() override = default;
+
+    void Reset() override
+    {
+        for (auto& i : m_Population)
+        {
+            delete i;
+        }
+        m_Population.clear();
+        for (auto &i: m_NextPopulation)
+        {
+            delete i;
+        }
+        m_NextPopulation.clear();
+        for (auto &i: m_Archive)
+        {
+            delete i;
+        }
+        m_Archive.clear();
+    };
+protected:
+    std::vector<SMOIndividual*> m_Population;
+    std::vector<SMOIndividual*> m_NextPopulation;
+    std::vector<SMOIndividual*> m_Archive;
+};
+
+
+optimizer\src\method\methods\MO\ANTGA\CANTGA.h
+=============
+#pragma once
+
+#include "method/configMap/SConfigMap.h"
+#include "method/individual/MO/SMOIndividual.h"
+#include "method/methods/MO/AMOGeneticMethod.h"
+#include "method/operators/selection/selections/CRankedTournament.h"
+#include "method/operators/selection/selections/CGapSelectionByRandomDim.h"
+#include "method/multiOperator/AMultiOperator.h"
+
+template <typename T> class CCSV;
+
+class CANTGA : public AMOGeneticMethod
+{
+public:
+    CANTGA(
+        AProblem& evaluator,
+        AInitialization& initialization,
+        ACrossover& crossover,
+        AMutation& mutation,
+        CGapSelectionByRandomDim& gapSelection,
+        SConfigMap* configMap
+    );
+
+    ~CANTGA();
+
+    void RunOptimization() override;
+    void Reset() override;
+
+private:
+    int m_Generation = 0;
+    CGapSelectionByRandomDim& m_GapSelection;
+    AMultiOperator<AMutation>* m_MultiMutation = nullptr;
+
+    void EvolveToNextGeneration();
+    void CrossoverAndMutate(SMOIndividual* firstParent, SMOIndividual* secondParent);
+    void LogIndividualsToCSV(CCSV<float>& csv, const std::vector<SMOIndividual*>& individuals) const;
+};
+
+optimizer\src\method\methods\MO\BNTGA\CBNTGA.h
+=============
+#pragma once
+
+#include "../../../configMap/SConfigMap.h"
+#include "../../../individual/MO/SMOIndividual.h"
+#include "../AMOGeneticMethod.h"
+#include "../../../operators/selection/selections/CRankedTournament.h"
+#include "../../../operators/selection/selections/CGapSelectionByRandomDim.h"
+
+class CBNTGA : public AMOGeneticMethod
+{
+public:
+    CBNTGA(
+            AProblem &evaluator,
+            AInitialization &initialization,
+            ACrossover &crossover,
+            AMutation &mutation,
+            CGapSelectionByRandomDim& gapSelection,
+            SConfigMap *configMap
+    );
+    ~CBNTGA() override = default;
+
+    void RunOptimization() override;
+
+private:
+    CGapSelectionByRandomDim &m_GapSelection;
+    
+    void EvolveToNextGeneration();
+    void CrossoverAndMutate(SMOIndividual *firstParent, SMOIndividual *secondParent);
+};
+
+
+optimizer\src\method\methods\MO\MOEAD\CMOEAD.h
+=============
+#pragma once
+
+#include <set>
+#include "../AMOGeneticMethod.h"
+#include "../../../configMap/SConfigMap.h"
+
+class CMOEAD : public AMOGeneticMethod
+{
+public:
+    CMOEAD(
+            AProblem &evaluator,
+            AInitialization &initialization,
+            ACrossover &crossover,
+            AMutation &mutation,
+            SConfigMap *configMap
+    );
+    ~CMOEAD() override = default;
+
+    void RunOptimization() override;
+private:
+    struct SSubproblem
+    {
+        std::vector<float> m_WeightVector;
+        std::vector<size_t> m_Neighborhood;
+    };
+    
+    size_t m_PartitionsNumber = 0;
+    size_t m_NeighbourhoodSize = 0;
+    size_t m_GenerationLimit = 0;
+    std::vector<SSubproblem> m_Subproblems;
+    
+    void EvolveToNextGeneration();
+    void ConstructSubproblems(size_t number, size_t size);
+    void ConstructSubproblemsSimple2D(size_t number, size_t size);
+    void ConstructSubproblemsMultiD(size_t number, size_t size, size_t count);
+    bool IsBetterInSubproblem(SMOIndividual *pIndividual, SMOIndividual *&pIndividual1, SSubproblem &subproblem);
+};
+
+optimizer\src\method\methods\MO\NSGAII\CNSGAII.h
+=============
+#pragma once
+
+#include <vector>
+#include "../../../configMap/SConfigMap.h"
+#include "../../../individual/MO/SMOIndividual.h"
+#include "../AMOGeneticMethod.h"
+#include "../../../operators/selection/selections/CRankedTournament.h"
+
+class CNSGAII : public AMOGeneticMethod
+{
+public:
+    CNSGAII(
+            AProblem &evaluator,
+            AInitialization &initialization,
+            CRankedTournament &rankedTournament,
+            ACrossover &crossover,
+            AMutation &mutation,
+            SConfigMap *configMap
+    );
+    ~CNSGAII() override = default;
+
+    void RunOptimization() override;
+private:
+    CRankedTournament &m_RankedTournament;
+
+    void EvolveToNextGeneration();
+    void CalcCrowdingDistance(std::vector<SMOIndividual *> &population, std::vector<size_t> &indices);
+};
+
+optimizer\src\method\methods\MO\NTGA2\CNTGA2.h
+=============
+#pragma once
+
+#include "../AMOGeneticMethod.h"
+#include "../../../configMap/SConfigMap.h"
+#include "../../../operators/selection/selections/CRankedTournament.h"
+#include "../../../operators/selection/selections/CGapSelectionByRandomDim.h"
+
+class CNTGA2 : public AMOGeneticMethod
+{
+public:
+    CNTGA2(
+            AProblem &evaluator,
+            AInitialization &initialization,
+            CRankedTournament &rankedTournament,
+            CGapSelectionByRandomDim &gapSelection,
+            ACrossover &crossover,
+            AMutation &mutation,
+            SConfigMap *configMap
+    );
+    ~CNTGA2() override = default;
+
+    void RunOptimization() override;
+private:
+    int m_GapSelectionPercent = 0;
+
+    CRankedTournament &m_RankedTournament;
+    CGapSelectionByRandomDim &m_GapSelection;
+    
+    void CrossoverAndMutate(SMOIndividual &firstParent, SMOIndividual &secondParent);
+};
+
+optimizer\src\method\methods\MO\NTGA2_ALNS\CNTGA2_ALNS.h
+=============
+#pragma once
+
+#include <map>
+#include "../AMOGeneticMethod.h"
+#include "../../../configMap/SConfigMap.h"
+#include "../../../operators/selection/selections/CRankedTournament.h"
+#include "../../../operators/selection/selections/CGapSelectionByRandomDim.h"
+
+class CNTGA2_ALNS : public AMOGeneticMethod
+{
+public:
+    CNTGA2_ALNS(
+        AProblem& evaluator,
+        AInitialization& initialization,
+        CRankedTournament& rankedTournament,
+        CGapSelectionByRandomDim& gapSelection,
+        ACrossover& crossover,
+        AMutation& mutation,
+        SConfigMap* configMap,
+        std::vector<AMutation*>& alnsRemovalMutations,
+        std::vector<AMutation*>& alnsInsertionMutations
+    );
+    ~CNTGA2_ALNS() override = default;
+
+    void RunOptimization() override;
+private:
+    int m_GapSelectionPercent = 0;
+    int m_ALNSProbabilityPercent = 0;
+    float m_effectivnessThreshold = 0;
+    int m_ALNSIterations = 0;
+    int m_ALNSNoImprovementIterations = 0;
+    float m_ALNSStartTemperature = 0;
+    float m_ALNSTemperatureAnnealingRate = 0;
+    int m_ALNSProbabilityStepsIterations = 0;
+
+    std::vector<SMOIndividual*> m_PreviousPopulation;
+    std::vector<AMutation*>& m_alnsRemovalMutations;
+    std::vector<AMutation*>& m_alnsInsertionMutations;
+    CRankedTournament &m_RankedTournament;
+    CGapSelectionByRandomDim &m_GapSelection;
+    
+    void CrossoverAndMutate(SMOIndividual &firstParent, SMOIndividual &secondParent);
+    void EvaluateAndAdd(SMOIndividual& individual);
+    bool ShouldUseALNS(std::vector<SMOIndividual*>& previousPopulation, std::vector<SMOIndividual*> currentPopulation);
+    bool AcceptWorseSolution(SMOIndividual& generated, SMOIndividual& current, float temperature);
+
+    void RunGenerationWithGap();
+    void RunGeneration();
+
+    void LogResult();
+
+    void UpdateProbabilityTables(std::map<AMutation*, std::tuple<float, int>>& removalOperatorsScores,
+        std::vector<float>& removalOperatorsProbabilityDistribution,
+        std::map<AMutation*, std::tuple<float, int>>& insertOperatorsScores,
+        std::vector<float>& insertionOperatorsProbabilityDistribution
+    );
+
+    void UpdateScores(SMOIndividual* current,
+        SMOIndividual* best,
+        AMutation*& removalOperator,
+        AMutation*& insertOperator,
+        std::map<AMutation*, std::tuple<float, int>>& removalOperatorsScores,
+        std::map<AMutation*, std::tuple<float, int>>& insertOperatorsScores
+    );
+
+    SMOIndividual* RunALNS(SMOIndividual& parent);
+};
+
+optimizer\src\method\methods\MO\SPEA2\CSPEA2.h
+=============
+#pragma once
+
+#include "../AMOGeneticMethod.h"
+#include "../../../configMap/SConfigMap.h"
+
+class CSPEA2 : public AMOGeneticMethod
+{
+public:
+    CSPEA2(
+            AProblem &evaluator,
+            AInitialization &initialization,
+            ACrossover &crossover,
+            AMutation &mutation,
+            SConfigMap *configMap
+    );
+    ~CSPEA2() override = default;
+
+    void RunOptimization() override;
+private:
+    using TNeighborhood = std::vector<std::pair<size_t, float>>;
+    
+    size_t m_GenerationLimit = 0;
+    size_t m_ArchiveSize = 0;
+    
+    void EvolveToNextGeneration();
+    void BuildNeighborhood(std::vector<SMOIndividual *>& individuals, std::vector<TNeighborhood>& neighborhood);
+    float CalcDist(const SMOIndividual &leftInd, const SMOIndividual &rightInd);
+    void UpdateDensity(std::vector<SMOIndividual *> &individuals, const std::vector<TNeighborhood> &neighborhood);
+    void EnviroSelection(std::vector<SMOIndividual *> &individuals);
+    void SplitByDomination(std::vector<SMOIndividual *> &individuals, std::vector<const SMOIndividual *> &dominatedIndividuals, std::vector<const SMOIndividual *> &nonDominatedIndividuals);
+    void TruncateByDistance(std::vector<const SMOIndividual *> &filteredIndividuals, size_t maxSize);
+    size_t Spea2TournamentSelection(const std::vector<SMOIndividual *> &population);
+    void UpdateFineGrainedFitness(std::vector<SMOIndividual *> &individuals, const std::vector<TNeighborhood> &neighborhood);
+    void UpdateRawFitness(std::vector<SMOIndividual *> &individuals);
+};
+
+optimizer\src\method\methods\MO\utils\archive\ArchiveUtils.h
+=============
+﻿#pragma once
+
+#include <vector>
+#include <string>
+#include "../../../../individual/MO/SMOIndividual.h"
+
+namespace ArchiveUtils
+{
+    void CopyToArchiveWithFiltering(const std::vector<SMOIndividual *> &individuals, std::vector<SMOIndividual *> &archive);
+    void CopyToArchiveForSingleObjective(const std::vector<SMOIndividual *> &individuals,
+                                         std::vector<SMOIndividual *> &archive, std::vector<float> objectiveWeights);
+    void CopyToArchiveWithFiltering(const SMOIndividual *individual, std::vector<SMOIndividual *> &archive);
+    void SaveArchiveToFile(const std::vector<SMOIndividual *> &archive);
+    void SaveArchiveToFile(const std::vector<SMOIndividual *> &archive, const std::string &instanceName, int configId,
+                           int runId);
+    std::vector<std::vector<float>> ToEvaluation(const std::vector<SMOIndividual *> &archive);
+    void LogParetoFront(const std::vector<SMOIndividual *> &archive);
+};
+
+
+optimizer\src\method\methods\MO\utils\clustering\CNonDominatedSorting.h
+=============
+#pragma once
+
+#include "../../../../individual/MO/SMOIndividual.h"
+
+class CNonDominatedSorting
+{
+public:
+
+    void Cluster(std::vector<SMOIndividual *> &population, std::vector<std::vector<size_t>> &clusters);
+
+private:
+
+    struct SSolution
+    {
+        SSolution(size_t i);
+
+        size_t m_Idx;
+        std::vector<SSolution *> m_DominatedSolutions;
+        size_t m_DominationCounter;
+    };
+};
+
+optimizer\src\method\methods\MO\utils\DasDennis\CDasDennis.h
+=============
+#pragma once
+#include <vector>
+#include <stddef.h>
+
+class DasDennis
+{
+public:
+	DasDennis(size_t axisPartitions, size_t dimNumb);
+	size_t GetPointsNumber() const;
+	const std::vector<std::vector<float>>& GetPoints() const { return m_Points; }
+	void GeneratePoints();
+private:
+
+	size_t m_AxisPartitions;
+	size_t m_DimensionNumber;
+
+	size_t m_M;
+	std::vector<std::vector<float>> m_Points;
+
+	void GenerateLayerRecursive(const std::vector<float>& layer, size_t d, size_t l);
+	float SumVector(const std::vector<float> vec) const;
+	std::vector<float> Linspace(float start, float end, size_t partitions) const;
+	float BinomialCoefficient(size_t n, size_t k) const;
+	size_t Factorial(size_t n) const;
+};
+
+optimizer\src\method\methods\SO\ASOGeneticMethod.h
+=============
+#pragma once
+
+#include "../../individual/MO/SMOIndividual.h"
+#include "../../AGeneticMethod.h"
+
+class ASOGeneticMethod : public AGeneticMethod
+{
+public:
+    explicit ASOGeneticMethod(AProblem& evaluator, AInitialization& initialization,
+        ACrossover& crossover,
+        AMutation& mutation, std::vector<float> &objectiveWeights) : AGeneticMethod(evaluator, initialization, crossover, mutation), m_ObjectiveWeights(objectiveWeights)
+    {};
+    ~ASOGeneticMethod() override = default;
+
+    void Reset()
+    {
+        for (auto& i : m_Population)
+        {
+            delete i;
+        }
+        m_Population.clear();
+    };
+protected:
+    std::vector<float> &m_ObjectiveWeights;
+    std::vector<SSOIndividual*> m_Population;
+};
+
+
+optimizer\src\method\methods\SO\ASOMethod.h
+=============
+#pragma once
+
+#include "../../AMethod.h"
+#include "../../individual/SO/SSOIndividual.h"
+
+class ASOMethod : public AMethod
+{
+public:
+    explicit ASOMethod(AProblem &evaluator, AInitialization &initialization, std::vector<float>& objectiveWeights) :
+    AMethod(evaluator, initialization), m_ObjectiveWeights(objectiveWeights)
+    {};
+    ~ASOMethod() override = default;
+
+    void Reset() override
+    {
+        for (auto &i: m_Population)
+        {
+            delete i;
+        }
+        m_Population.clear();
+    };
+protected:
+    std::vector<float> &m_ObjectiveWeights;
+    std::vector<SSOIndividual *> m_Population;
+};
+
+
+
+optimizer\src\method\methods\SO\CAggregatedFitness.h
+=============
+#pragma once
+#include "../../individual/SO/SSOIndividual.h"
+
+
+class CAggregatedFitness
+{
+public:
+    static void CountFitness(SSOIndividual &individual, std::vector<float> &objectiveWeights);
+};
+
+
+optimizer\src\method\methods\SO\ACO\CACO.h
+=============
+#pragma once
+
+#include "../ASOMethod.h"
+#include "../../../operators/initialization/AInitialization.h"
+#include "../../../operators/crossover/ACrossover.h"
+#include "../../../operators/mutation/AMutation.h"
+#include "../../../individual/SO/SSOIndividual.h"
+#include "../../../configMap/SConfigMap.h"
+#include "../../../operators/selection/selections/CFitnessTournament.h"
+#include <limits>
+
+class CACO : public ASOMethod {
+public:
+    explicit CACO(
+            AProblem &evaluator,
+            AInitialization &initialization,
+            std::vector<float> &objectiveWeights
+    ): ASOMethod(evaluator, initialization, objectiveWeights) {};
+
+    virtual ~CACO()= default;
+};
+
+
+optimizer\src\method\methods\SO\ACO\TSP-BASED\CACO_TSP.h
+=============
+#pragma once
+
+#include "../CACO.h"
+
+enum InitType {
+    Uniform = 1,
+    Distance = 2
+};
+
+class CACO_TSP : public CACO {
+public:
+    CACO_TSP(
+        AProblem &evaluator,
+        AInitialization &initialization,
+        SConfigMap *configMap,
+        std::vector<float> &objectiveWeights
+    );
+
+    ~CACO_TSP() override = default;
+
+    void RunOptimization() override;
+
+private:
+    std::vector<std::vector<float>> m_PheromoneMap;
+    float m_ReducingMultiplier;
+    SSOIndividual *m_GloballyBest;
+    int m_GenerationLimit;
+    int m_PopulationSize;
+    InitType m_InitType;
+    std::vector<std::vector<float>> m_DistanceMatrix;
+
+    void LogResultData();
+
+    void AddExperimentData(int generation);
+
+    void RunAnts();
+
+    void AntMarch();
+
+    void LeavePheromone();
+
+    void RandomAnts();
+
+    void GetBestRoute();
+
+    SSOIndividual *GetRandomAnt();
+
+    void ResetPheromoneMap();
+
+    void SavePheromoneMap(int generation);
+};
+
+
+
+optimizer\src\method\methods\SO\DEGR\CDE.h
+=============
+#pragma once
+
+#include "../../../configMap/SConfigMap.h"
+#include "../ASOMethod.h"
+
+class CDE : public ASOMethod
+{
+public:
+    CDE(
+            std::vector<float>& objectiveWeights,
+            AProblem& evaluator,
+            AInitialization& initialization,
+            SConfigMap* configMap
+    );
+    ~CDE() override = default;
+
+    void RunOptimization() override;
+
+    void Reset()
+    {
+        for (auto& i : m_Population)
+        {
+            delete i;
+        }
+        m_Population.clear();
+    };
+private:
+    size_t m_PopulationSize = 0;
+    size_t m_GenerationLimit = 0;
+    float m_Cr;
+    float m_F;
+
+    void CreateIndividual();
+    void EvolveToNextGeneration();
+    void DifferentialEvolutionStep(SGenotype& donor, const SGenotype& gens1, const SGenotype& gens2, const SGenotype& gens3);
+};
+
+
+optimizer\src\method\methods\SO\GA\CGA.h
+=============
+#pragma once
+
+#include "../../../operators/initialization/AInitialization.h"
+#include "../../../operators/crossover/ACrossover.h"
+#include "../../../operators/mutation/AMutation.h"
+#include "../../../individual/SO/SSOIndividual.h"
+#include "../../../configMap/SConfigMap.h"
+#include "../../../operators/selection/selections/CFitnessTournament.h"
+#include "../../../AGeneticMethod.h"
+#include "../ASOGeneticMethod.h"
+
+class CGA : public ASOGeneticMethod
+{
+public:
+    CGA(
+            std::vector<float> &objectiveWeights,
+            AProblem &evaluator,
+            AInitialization &initialization,
+            CFitnessTournament &fitnessTournament,
+            ACrossover &crossover,
+            AMutation &mutation,
+            SConfigMap *configMap
+    );
+    ~CGA() override = default;
+
+    void RunOptimization() override;
+private:
+    CFitnessTournament &m_FitnessTournament;
+
+    void CreateIndividual();
+    void EvolveToNextGeneration();
+};
+
+optimizer\src\method\methods\SO\PSO\CPSO.h
+=============
+#pragma once
+
+#include "../../../operators/initialization/AInitialization.h"
+#include "../../../configMap/SConfigMap.h"
+#include "../../../individual/SO/SParticle.h"
+#include "../CAggregatedFitness.h"
+#include "../ASOMethod.h"
+
+class CPSO : public ASOMethod
+{
+public:
+    CPSO(
+        std::vector<float>& objectiveWeights,
+        AProblem& evaluator,
+        AInitialization& initialization,
+        SConfigMap* configMap
+    );
+    ~CPSO() override = default;
+
+    void RunOptimization() override;
+
+    void Reset()
+    {
+        for (auto& i : m_Swarm)
+        {
+            delete i;
+        }
+        m_Swarm.clear();
+    };
+private:
+    size_t m_IterationLimit = 0;
+    size_t m_SwarmSize = 0;
+    float m_InertiaWeight = 0.0f;
+    float m_CognitiveCoefficient = 0.0f;
+    float m_SocialCoefficient = 0.0f;
+
+    std::vector<SParticle*> m_Swarm;
+    std::vector<float> m_BestKnownPosition;
+    float m_BestKnownFitness = 0.0f;
+
+    int m_MigrationThreshold = 0;
+
+    SParticle* CreateParticle();
+    void MoveParticles();
+    void UpdatePosition(std::vector<float>& position, std::vector<float>& velocity);
+    void UpdateBests(SParticle* particle);
+    void Migrate();
+    void InitVelocity(SProblemEncoding& problemEncoding, std::vector<float> *newVelocity) const;
+};
+
+
+optimizer\src\method\methods\SO\SA\CSA.h
+=============
+#pragma  once
+
+#include "../../../configMap/SConfigMap.h"
+#include "../../../individual/SO/SSOIndividual.h"
+#include "../ASOMethod.h"
+
+class CSA : public ASOMethod
+{
+public:
+    CSA(std::vector<float> &objectiveWeights,AProblem& evaluator, AInitialization& initialization,
+        SConfigMap* configMap);
+   ~CSA() override;
+
+    void RunOptimization();
+
+    void Reset() { delete m_CurrentSolution; }
+
+private:
+    SSOIndividual* m_CurrentSolution;
+
+    double m_InitialTemperature;
+    double m_FinalTemperature;
+    double m_CoolingRate;
+
+    void InitializeSolution();
+    void Iterate(double temperature);
+};
+
+
+
+optimizer\src\method\methods\SO\TS\CTS.h
+=============
+#pragma once
+
+#include <list>
+#include <memory>
+#include "../../../configMap/SConfigMap.h"
+#include "../../../individual/SO/SSOIndividual.h"
+#include "../ASOMethod.h"
+
+class CTS : public ASOMethod
+{
+public:
+    CTS(std::vector<float> &objectiveWeights, AProblem& evaluator, AInitialization& initialization,
+        SConfigMap* configMap);
+    ~CTS() override = default;
+
+    void RunOptimization() override;
+
+    void Reset()
+    {
+        m_TabuList.clear();
+    };
+
+private:
+    int m_TabuListSize;
+    int m_MaxIterations;
+    float m_SimilarityThreshold;
+    std::shared_ptr<SSOIndividual> m_CurrentSolution;
+    std::list<std::shared_ptr<SSOIndividual>> m_TabuList;
+    
+    void InitializeSolution();
+    bool IsTabu(const std::shared_ptr<SSOIndividual> candidate);
+    void UpdateTabuList(std::shared_ptr<SSOIndividual> newSolution);
+};
+
+optimizer\src\method\methods\SO\utils\aggregatedFitness\CAggregatedFitness.h
+=============
+#pragma once
+
+#include "../../../../individual/SO/SSOIndividual.h"
+
+class CAggregatedFitness
+{
+public:
+    static void CountFitness(SSOIndividual &individual, std::vector<float> &objectiveWeights);
+    static double CalculateDelta(const SSOIndividual& newSolution, const SSOIndividual& currentSolution, std::vector<float> &objectiveWeights);
+};
+
+
+optimizer\src\method\methods\SO\utils\experiment\CSOExperimentUtils.h
+=============
+#pragma once
+
+#include "../../../../individual/SO/SSOIndividual.h"
+#include "../../../../../problem/AProblem.h"
+#include "../../../../individual/SO/SParticle.h"
+#include <vector>
+#include <string>
+
+class CSOExperimentUtils
+{
+public:
+    static void AddExperimentData(int generation, const std::vector<SSOIndividual*>& population);
+    static void AddExperimentData(int generation, const std::vector<SParticle*>& swarm);
+    static void LogResultData(SSOIndividual& best, AProblem& problem);
+    static SSOIndividual* FindBest(const std::vector<SSOIndividual *> &population);
+    static SSOIndividual* FindBest(const std::vector<SParticle *> &swarm);
+private:
+    static std::string BestToCSVString(const SSOIndividual& best);
+};
+
+
+optimizer\src\method\multiOperator\AMultiOperator.h
+=============
+#pragma once
+
+#include <vector>
+#include "CAtomicOperator.h"
+
+template <typename O>
+class AMultiOperator
+{
+public:
+    void AddOperator(O* newAtomicOperator)
+    {
+        m_AtomicOperators.emplace_back(newAtomicOperator, m_AtomicOperators.size());
+    }
+
+    virtual ~AMultiOperator()
+    {
+        for (CAtomicOperator<O>& atomicOperator : m_AtomicOperators)
+        {
+            delete atomicOperator.Get();
+        }
+    }
+
+    void ResetAllOperatorData()
+    {
+        for (auto& atomicOperator : m_AtomicOperators)
+        {
+            atomicOperator.ResetData();
+        }
+    }
+
+    SAtomicOperatorData& GetOperatorData(size_t operatorId) { return m_AtomicOperators[operatorId].GetData(); }
+
+    // Abstract function to override
+    virtual CAtomicOperator<O>* SelectOperator() = 0;
+
+protected:
+    std::vector<CAtomicOperator<O>> m_AtomicOperators;
+};
+
+
+optimizer\src\method\multiOperator\CAtomicOperator.h
+=============
+#pragma once
+
+#include "SAtomicOperatorData.h"
+
+template <typename O>
+class CAtomicOperator
+{
+public:
+    explicit CAtomicOperator(O* newAtomicOperator, size_t id)
+        : m_Operator(newAtomicOperator)
+        , m_Id(id)
+    {}
+
+    O* Get() const { return m_Operator; }
+    size_t GetId() const { return m_Id; }
+    SAtomicOperatorData& GetData() { return m_Data; }
+    void ResetData() { m_Data = SAtomicOperatorData(); }
+
+private:
+    O* m_Operator = nullptr;
+    size_t m_Id;
+    SAtomicOperatorData m_Data;
+};
+
+optimizer\src\method\multiOperator\SAtomicOperatorData.h
+=============
+#pragma once
+
+struct SAtomicOperatorData
+{
+    size_t m_Credits = 0;
+    size_t m_Calls = 0;
+};
+
+optimizer\src\method\multiOperator\operatorSelectors\CCreditRouletteMultiOperator.h
+=============
+#pragma once
+
+#include "method/multiOperator/AMultiOperator.h"
+#include "utils/random/CRandom.h"
+
+template <typename O>
+class CCreditRouletteMultiOperator: public AMultiOperator<O>
+{
+public:
+    virtual CAtomicOperator<O>* SelectOperator()
+    {
+        if (this->m_AtomicOperators.empty())
+        {
+            return nullptr;
+        }
+        else
+        {
+            float creditSum = 0.f;
+            for (CAtomicOperator<O>& atomicOperator : this->m_AtomicOperators)
+            {
+                creditSum += ((float)atomicOperator.GetData().m_Credits + 1);
+            }
+            float randVal = CRandom::GetFloat(0.f, 1.f);
+            float rouletteWheel = 0.f;
+            for (CAtomicOperator<O>& atomicOperator : this->m_AtomicOperators)
+            {
+                rouletteWheel += (((float)atomicOperator.GetData().m_Credits + 1) / creditSum);
+                if (randVal < rouletteWheel)
+                {
+                    return &atomicOperator;
+                }
+            }
+            return &this->m_AtomicOperators.back();
+        }
+    }
+};
+
+
+
+
+optimizer\src\method\multiOperator\operatorSelectors\CInvCreditRouletteMultiOperator.h
+=============
+#pragma once
+
+#include "method/multiOperator/AMultiOperator.h"
+#include "utils/random/CRandom.h"
+
+template <typename O>
+class CInvCreditRouletteMultiOperator: public AMultiOperator<O>
+{
+public:
+    virtual CAtomicOperator<O>* SelectOperator()
+    {
+        if (this->m_AtomicOperators.empty())
+        {
+            return nullptr;
+        }
+        else
+        {
+            float invCreditSum = 0.f;
+            for (CAtomicOperator<O>& atomicOperator : this->m_AtomicOperators)
+            {
+                invCreditSum += (1.f / ((float)atomicOperator.GetData().m_Credits + 1));
+            }
+            float randVal = CRandom::GetFloat(0.f, 1.f);
+            float rouletteWheel = 0.f;
+            for (CAtomicOperator<O>& atomicOperator : this->m_AtomicOperators)
+            {
+                rouletteWheel += ((1.f / ((float)atomicOperator.GetData().m_Credits + 1)) / invCreditSum);
+                if (randVal < rouletteWheel)
+                {
+                    return &atomicOperator;
+                }
+            }
+            return &this->m_AtomicOperators.back();
+        }
+    }
+};
+
+
+
+
+optimizer\src\method\multiOperator\operatorSelectors\CUniformMultiOperator.h
+=============
+#pragma once
+
+#include "method/multiOperator/AMultiOperator.h"
+#include "utils/random/CRandom.h"
+
+template <typename O>
+class CUniformMultiOperator: public AMultiOperator<O>
+{
+public:
+    CAtomicOperator<O>* SelectOperator()
+    {
+        if (this->m_AtomicOperators.empty())
+        {
+            return nullptr;
+        }
+        else
+        {
+            return &this->m_AtomicOperators[CRandom::GetInt(0, (int)this->m_AtomicOperators.size())];
+        }
+    }
+};
+
+
+
+optimizer\src\method\operators\crossover\ACrossover.h
+=============
+
+#pragma once
+
+#include <vector>
+#include "../../../problem/SProblemEncoding.h"
+#include "../../individual/AIndividual.h"
+
+class ACrossover
+{
+public:
+    virtual ~ACrossover() = default;
+
+    virtual void Crossover(
+            const SProblemEncoding& problemEncoding,
+            AIndividual &firstParent,
+            AIndividual &secondParent,
+            AIndividual &firstChild,
+            AIndividual &secondChild) = 0;
+};
+
+
+optimizer\src\method\operators\crossover\crossovers\CCVRP_OX.h
+=============
+#include "../ACrossover.h"
+
+class CCVRP_OX : public ACrossover
+{
+public:
+    explicit CCVRP_OX(float crossoverProbability) : m_CrossoverProbability(crossoverProbability)
+    {};
+    ~CCVRP_OX() override = default;
+
+    void Crossover(
+            const SProblemEncoding& problemEncoding,
+            AIndividual &firstParent,
+            AIndividual &secondParent,
+            AIndividual &firstChild,
+            AIndividual &secondChild) override;
+private:
+    float m_CrossoverProbability;
+
+    void FixChild(AIndividual &firstChild);
+};
+
+
+optimizer\src\method\operators\crossover\crossovers\CTTP_OS_SX.h
+=============
+#pragma once
+
+#include "../ACrossover.h"
+
+class CTTP_OS_SX : public ACrossover
+{
+public:
+    explicit CTTP_OS_SX(float routeCrProb, float knapCrProb) : m_RouteCrProb(routeCrProb), m_KnapCrProb(knapCrProb)
+    {};
+    ~CTTP_OS_SX() override = default;
+
+    void Crossover(
+            const SProblemEncoding& problemEncoding,
+            AIndividual &firstParent,
+            AIndividual &secondParent,
+            AIndividual &firstChild,
+            AIndividual &secondChild) override;
+private:
+    float m_RouteCrProb;
+    float m_KnapCrProb;
+};
+
+optimizer\src\method\operators\crossover\crossovers\CUniformCX.h
+=============
+#pragma once
+
+#include "../ACrossover.h"
+
+class CUniformCX : public ACrossover
+{
+public:
+    explicit CUniformCX(float crossoverProbability) : m_CrossoverProbability(crossoverProbability)
+    {};
+    ~CUniformCX() override = default;
+
+    void Crossover(
+            const SProblemEncoding& problemEncoding,
+            AIndividual &firstParent,
+            AIndividual &secondParent,
+            AIndividual &firstChild,
+            AIndividual &secondChild) override;
+private:
+    float m_CrossoverProbability;
+};
+
+
+optimizer\src\method\operators\initialization\AInitialization.h
+=============
+
+#pragma once
+
+#include "../../../problem/SProblemEncoding.h"
+#include "../../individual/MO/SMOIndividual.h"
+#include "../../individual/SGenotype.h"
+#include "../../individual/SO/SSOIndividual.h"
+#include "../../individual/SO/SParticle.h"
+#include "../../../problem/problems/ECVRPTW/CECVRPTW.h"
+
+class AInitialization
+{
+public:
+    virtual ~AInitialization() = default;
+
+    virtual SSOIndividual* CreateSOIndividual(SProblemEncoding &encoding) = 0;
+    virtual SSOIndividual* CreateSOIndividual(SProblemEncoding &encoding, SGenotype& genotype) = 0;
+    virtual SMOIndividual* CreateMOIndividual(SProblemEncoding &encoding) = 0;
+    virtual SSOIndividual* CreateNeighborSolution(SProblemEncoding &encoding, const SSOIndividual &baseSolution) = 0;
+    virtual SParticle* CreateParticle(SProblemEncoding &encoding) = 0;
+};
+
+
+optimizer\src\method\operators\initialization\initializations\CECVRPTWInitialization.h
+=============
+#pragma once
+
+#include "../AInitialization.h"
+#include "../../../individual/SO/SSOIndividual.h"
+#include "problem/problems/ECVRPTW/CECVRPTW.h"
+
+class CECVRPTWInitialization : public AInitialization
+{
+public:
+    explicit CECVRPTWInitialization(CECVRPTW& problem) : m_Problem(problem) {}
+    ~CECVRPTWInitialization() override = default;
+
+    SSOIndividual* CreateSOIndividual(SProblemEncoding& encoding) override;
+    SSOIndividual* CreateSOIndividual(SProblemEncoding& encoding, SGenotype& genotype) override;
+    SMOIndividual* CreateMOIndividual(SProblemEncoding& encoding) override;
+    SSOIndividual* CreateNeighborSolution(SProblemEncoding& encoding, const SSOIndividual& baseSolution) override;
+    SParticle* CreateParticle(SProblemEncoding& encoding) override;
+private:
+    void InitGenotype(SProblemEncoding& encoding, SGenotype& genotype) const;
+    CECVRPTW& m_Problem;
+};
+
+
+optimizer\src\method\operators\initialization\initializations\CInitialization.h
+=============
+#pragma once
+
+#include "../AInitialization.h"
+#include "../../../individual/SO/SSOIndividual.h"
+
+class CInitialization : public AInitialization
+{
+public:
+    ~CInitialization() override = default;
+    
+    SSOIndividual* CreateSOIndividual(SProblemEncoding &encoding) override;
+    SSOIndividual* CreateSOIndividual(SProblemEncoding &encoding, SGenotype& genotype) override;
+    SMOIndividual* CreateMOIndividual(SProblemEncoding &encoding) override;
+    SSOIndividual* CreateNeighborSolution(SProblemEncoding &encoding, const SSOIndividual &baseSolution) override;
+    SParticle* CreateParticle(SProblemEncoding &encoding) override;
+private:
+    void InitGenotype(SProblemEncoding &encoding, SGenotype &genotype) const;
+};
+
+
+optimizer\src\method\operators\mutation\AMutation.h
+=============
+
+#pragma once
+
+#include "../../../problem/SProblemEncoding.h"
+#include "../../individual/AIndividual.h"
+
+class AMutation
+{
+public:
+    virtual ~AMutation() = default;
+
+    virtual void Mutate(SProblemEncoding& problemEncoding, AIndividual &child) = 0;
+};
+
+
+optimizer\src\method\operators\mutation\mutations\CCheapestResourceMutation.h
+=============
+#pragma once
+
+#include "../AMutation.h"
+
+class CMSRCPSP_TA;
+
+class CCheapestResourceMutation : public AMutation
+{
+public:
+    CCheapestResourceMutation(float geneMutProb, const CMSRCPSP_TA& problemDefinition);
+    void Mutate(SProblemEncoding& problemEncoding, AIndividual& child) override;
+
+private:
+    float m_GeneMutProb;
+    const CMSRCPSP_TA& m_ProblemDefinition;
+};
+
+
+optimizer\src\method\operators\mutation\mutations\CCVRPReverseFlip.h
+=============
+//
+#pragma once
+
+#include "../AMutation.h"
+
+class CCVRPReverseFlip : public AMutation
+{
+public:
+    explicit CCVRPReverseFlip(float reverseMutProb) : m_ReverseMutProb(reverseMutProb)
+    {};
+    ~CCVRPReverseFlip() override = default;
+
+    void Mutate(SProblemEncoding& problemEncoding, AIndividual &child) override;
+private:
+    float m_ReverseMutProb;
+};
+
+optimizer\src\method\operators\mutation\mutations\CLeastAssignedResourceMutation.h
+=============
+#pragma once
+
+#include "../AMutation.h"
+
+class CMSRCPSP_TA;
+
+class CLeastAssignedResourceMutation : public AMutation
+{
+public:
+    CLeastAssignedResourceMutation(float geneMutProb, const CMSRCPSP_TA& problemDefinition);
+    void Mutate(SProblemEncoding& problemEncoding, AIndividual& child) override;
+
+private:
+    float m_GeneMutProb;
+    const CMSRCPSP_TA& m_ProblemDefinition;
+};
+
+
+
+optimizer\src\method\operators\mutation\mutations\CRandomBit.h
+=============
+#pragma once
+
+#include "../AMutation.h"
+#include "../../../../problem/SProblemEncoding.h"
+
+class CRandomBit : public AMutation
+{
+public:
+    explicit CRandomBit(float mutationProbability) : m_MutationProbability(mutationProbability)
+    {};
+    ~CRandomBit() override = default;
+
+    void Mutate(SProblemEncoding& problemEncoding, AIndividual &child) override;
+private:
+    float m_MutationProbability;
+};
+
+
+optimizer\src\method\operators\mutation\mutations\CTTPReverseFlip.h
+=============
+#pragma once
+
+#include "../AMutation.h"
+
+class CTTPReverseFlip : public AMutation
+{
+public:
+    explicit CTTPReverseFlip(float reverseMutProb, float flipMutProb) : m_ReverseMutProb(reverseMutProb),
+                                                                        m_FlipMutProb(flipMutProb)
+    {};
+    ~CTTPReverseFlip() override = default;
+
+    void Mutate(SProblemEncoding& problemEncoding, AIndividual &child) override;
+private:
+    float m_ReverseMutProb;
+    float m_FlipMutProb;
+};
+
+
+optimizer\src\method\operators\mutation\mutations\ECVRPTW\CECVRPTWRandomClientInsertion.h
+=============
+#pragma once
+
+#include <algorithm>
+#include <chrono>
+#include "method/operators/mutation/AMutation.h"
+
+class CECVRPTW;
+
+class CECVRPTWRandomClientInsertion : public AMutation
+{
+public:
+	explicit CECVRPTWRandomClientInsertion(CECVRPTW& problemDefinition);
+	void Mutate(SProblemEncoding& problemEncoding, AIndividual& child) override;
+
+private:
+    CECVRPTW& m_ProblemDefinition; // TODO - should be const
+};
+
+optimizer\src\method\operators\mutation\mutations\ECVRPTW\CECVRPTWRandomClientRemoval.h
+=============
+#pragma once
+
+#include <algorithm>
+#include "method/operators/mutation/AMutation.h"
+
+class CECVRPTW;
+
+class CECVRPTWRandomClientRemoval : public AMutation
+{
+public:
+	explicit CECVRPTWRandomClientRemoval(CECVRPTW& problemDefinition);
+	void Mutate(SProblemEncoding& problemEncoding, AIndividual& child) override;
+
+private:
+    CECVRPTW& m_ProblemDefinition; // TODO - should be const
+};
+
+optimizer\src\method\operators\mutation\mutations\ECVRPTW\CECVRPTWShawClientInsertion.h
+=============
+#pragma once
+
+#include <algorithm>
+#include <chrono>
+#include "method/operators/mutation/AMutation.h"
+
+class CECVRPTW;
+
+class CECVRPTWShawClientInsertion : public AMutation
+{
+public:
+	explicit CECVRPTWShawClientInsertion(CECVRPTW& problemDefinition);
+	void Mutate(SProblemEncoding& problemEncoding, AIndividual& child) override;
+
+private:
+    CECVRPTW& m_ProblemDefinition; // TODO - should be const
+};
+
+optimizer\src\method\operators\mutation\mutations\ECVRPTW\CECVRPTWShawClientRemoval.h
+=============
+#pragma once
+
+#include <algorithm>
+#include "method/operators/mutation/AMutation.h"
+
+class CECVRPTW;
+
+class CECVRPTWShawClientRemoval : public AMutation
+{
+public:
+	explicit CECVRPTWShawClientRemoval(CECVRPTW& problemDefinition);
+	void Mutate(SProblemEncoding& problemEncoding, AIndividual& child) override;
+
+private:
+    CECVRPTW& m_ProblemDefinition; // TODO - should be const
+	std::vector<int> m_CustomerIndexes;
+};
+
+optimizer\src\method\operators\selection\selections\ASelection.h
+=============
+#pragma once
+
+class ASelection
+{
+public:
+    explicit ASelection(int tournamentSize) : m_TournamentSize(tournamentSize)
+    {};
+    virtual ~ASelection() = default;
+protected:
+    // TODO - we cannot assume a generic selection always uses a tournament size (e.g., roulette)
+    int m_TournamentSize;
+};
+
+
+optimizer\src\method\operators\selection\selections\CFitnessTournament.h
+=============
+#pragma once
+
+#include "ASelection.h"
+#include "../../../individual/SO/SSOIndividual.h"
+
+class CFitnessTournament : public ASelection
+{
+public:
+    explicit CFitnessTournament(int tournamentSize)
+            : ASelection(tournamentSize)
+    {};
+    ~CFitnessTournament() override = default;
+
+    SSOIndividual *Select(std::vector<SSOIndividual *> &population);
+};
+
+
+optimizer\src\method\operators\selection\selections\CGapSelectionByRandomDim.h
+=============
+#pragma once
+
+#include "../../../individual/MO/SMOIndividual.h"
+#include "ASelection.h"
+
+class CGapSelectionByRandomDim : public ASelection
+{
+public:
+    // TODO - if we have dynamic selection object, we can get rid of boolean "bntga" parameter, or make it a set of functions called by the method
+    explicit CGapSelectionByRandomDim(int tournamentSize, bool bntga) : ASelection(tournamentSize), m_BNTGA(bntga)
+    {};
+    ~CGapSelectionByRandomDim() override = default;
+
+    std::vector<std::pair<SMOIndividual*, SMOIndividual*>> Select(std::vector<SMOIndividual*>& parents, int objectiveNumber, int populationSize);
+private:
+    bool m_BNTGA;
+
+    std::vector<float> CalculateGapValues(std::vector<SMOIndividual*>& parents, int objectiveNumber) const;
+    size_t SelectParentIdxByTournament(const std::vector<SMOIndividual*>& parents, const std::vector<float>& gapValues) const;
+};
+
+
+optimizer\src\method\operators\selection\selections\CRankedTournament.h
+=============
+
+
+#pragma once
+
+#include "ASelection.h"
+#include "../../../individual/MO/SMOIndividual.h"
+
+class CRankedTournament : public ASelection
+{
+public:
+    explicit CRankedTournament(int tournamentSize) : ASelection(tournamentSize)
+    {};
+    ~CRankedTournament() override = default;
+
+    SMOIndividual *Select(std::vector<SMOIndividual *> &population);
+};
+
+
+optimizer\src\problem\AProblem.h
+=============
+#pragma once
+
+#include "SProblemEncoding.h"
+#include "../method/individual/SGenotype.h"
+#include "../method/individual/AIndividual.h"
+
+class AProblem
+{
+public:
+    virtual ~AProblem() = default;
+
+    virtual SProblemEncoding &GetProblemEncoding() = 0;
+    virtual void Evaluate(AIndividual& individual) = 0;
+    virtual void LogSolution(AIndividual& individual) = 0;
+    virtual void LogAdditionalData() = 0;
+};
+
+
+optimizer\src\problem\SProblemEncoding.h
+=============
+#pragma once
+
+#include <cstddef>
+#include <vector>
+
+struct SEncodingDescriptor
+{
+    float m_MinValue;
+    float m_MaxValue;
+};
+
+enum class EEncodingType
+{
+    ASSOCIATION = 0,
+    PERMUTATION,
+    BINARY,
+};
+
+struct SEncodingSection
+{
+    std::vector<SEncodingDescriptor> m_SectionDescription;
+    EEncodingType m_SectionType;
+};
+
+struct SProblemEncoding
+{
+    int m_objectivesNumber;
+    std::vector<SEncodingSection> m_Encoding;
+    std::vector<std::vector<float>> m_additionalProblemData;
+};
+
+optimizer\src\problem\problems\CVRP\CCVRP.h
+=============
+#pragma once
+
+#include "CCVRPTemplate.h"
+#include "../../AProblem.h"
+#include "../../../method/individual/SGenotype.h"
+
+class CCVRP : public AProblem {
+public:
+    explicit CCVRP(CCVRPTemplate& cvrpBase);
+
+    ~CCVRP() override = default;
+
+    SProblemEncoding& GetProblemEncoding() override;
+
+    void Evaluate(AIndividual& individual) override;
+    void LogSolution(AIndividual& individual) override;
+    void LogAdditionalData() override {};
+
+protected:
+    size_t GetNearestDepotIdx(size_t cityIdx);
+
+    std::vector<size_t> m_UpperBounds;
+    SProblemEncoding m_ProblemEncoding;
+    CCVRPTemplate& m_CVRPTemplate;
+    std::vector<float> m_MaxObjectiveValues;
+    std::vector<float> m_MinObjectiveValues;
+
+private:
+    void CreateProblemEncoding();
+};
+
+
+optimizer\src\problem\problems\CVRP\CCVRPTemplate.h
+=============
+#pragma once
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cfloat>
+
+struct SCityCVRP {
+    SCityCVRP(const int& id, const float& x, const float& y, const int& demand);
+
+    int m_ID;
+    float m_PosX, m_PosY;
+    int m_demand;
+};
+
+class CCVRPTemplate {
+public:
+
+    void Clear();
+    const std::string& GetFileName() const { return m_FileName; }
+    void SetFileName(const std::string& fileName) { m_FileName = fileName; }
+    void SetData(const std::vector<SCityCVRP>& cities, int capacity,int trucks,const std::vector<size_t>& depotIndexes);
+
+    const std::vector<SCityCVRP>& GetCities() const { return m_Cities; }
+    const std::vector<std::vector<float>>& GetDistMtx() const { return m_DistanceMatrix; }
+    const std::vector<float>& GetMinDistVec() const { return m_MinDistanceVec; }
+    const std::vector<size_t>& GetDepots()const { return m_DepotIndexes; }
+
+    int GetCapacity() const { return m_Capacity; }
+    int GetTrucks() const { return m_Trucks; }
+
+    size_t GetCitiesSize() const { return m_Cities.size(); }
+
+    float GetMinDistance() const;
+    float GetMaxDistance() const;
+
+private:
+    void CalculateContextData();
+
+    std::string m_FileName;
+
+    // File data
+    std::vector<SCityCVRP> m_Cities;
+    std::vector<size_t> m_DepotIndexes;
+    int m_Capacity;
+    int m_Trucks;
+
+    // Context data
+    std::vector<std::vector<float>> m_DistanceMatrix;
+    std::vector<float> m_MinDistanceVec;
+};
+
+
+optimizer\src\problem\problems\ECVRPTW\CECVRPTW.h
+=============
+#pragma once
+
+#include "CECVRPTWTemplate.h"
+#include "../../AProblem.h"
+#include "method/individual/SGenotype.h"
+#include <iterator>
+
+class CECVRPTW : public AProblem
+{
+public:
+    explicit CECVRPTW(CECVRPTWTemplate& cvrpBase);
+
+    SProblemEncoding& GetProblemEncoding() override { return m_ProblemEncoding; }
+
+    void Evaluate(AIndividual& individual) override;
+    void LogSolution(AIndividual& individual) override;
+
+    void LogAdditionalData();
+
+    CECVRPTWTemplate& GetECVRPTWTemplate() { return m_ECVRPTWTemplate; }
+    std::vector<int> GetRealPath(AIndividual& individual);
+
+protected:
+    std::vector<size_t> m_UpperBounds;
+    SProblemEncoding m_ProblemEncoding;
+    CECVRPTWTemplate& m_ECVRPTWTemplate;
+    std::vector<float> m_MaxObjectiveValues;
+    std::vector<float> m_MinObjectiveValues;
+
+private:
+    void CreateProblemEncoding();
+};
+
+
+optimizer\src\problem\problems\ECVRPTW\CECVRPTWSolution.h
+=============
+#pragma once
+
+#include <vector>
+#include <cstddef>
+
+class CECVRPTWTemplate;
+
+class CECVRPTWSolution
+{
+public:
+    CECVRPTWSolution(CECVRPTWTemplate& problemTemplate);
+
+    [[nodiscard]] float GetTotalDistance() const;
+    [[nodiscard]] float GetTotalDuration() const;
+
+    void BuildSolution(const std::vector<int>& initialAssignment);
+    [[nodiscard]] const std::vector<int>& GetSolution() const { return m_Solution; }
+
+private:
+
+    void PrepareData(const std::vector<int>& initialAssignment);
+    [[nodiscard]] bool CanSatisfyDemand(size_t carIdx, size_t cityIdx) const;
+    [[nodiscard]] bool CanSafelyReach(size_t carIdx, size_t cityIdx) const;
+    float CalculateRefuelTime(float tankCapacity, float currentTankCapacity);
+    void MoveCarToDepoLoadAndRecharge(size_t carIdx, size_t depotIdx);
+    void MoveCarToDepoLoadRechargeAndThenToCity(size_t carIdx, size_t depotIdx, size_t nextCityIdx);
+    void MoveCarToNextCity(size_t carIdx, size_t nextCityIdx);
+    void HandleTimeOnCity(size_t carIdx, size_t nextCityIdx);
+    void MoveCarToNearestRechargeStation(size_t carIdx);
+    void MoveCarToRechargeStationTowardsCity(size_t carIdx, size_t nextCityIdx);
+    void MoveCarToRechargeStation(size_t carIdx, size_t stationIdx);
+
+    CECVRPTWTemplate& m_ECVRPTWTemplate;
+
+    std::vector<int> m_CurrentLoad;
+    std::vector<size_t> m_CurrentPosition;
+    std::vector<float> m_Distance;
+    std::vector<float> m_CurrentTankCapacity;
+    std::vector<float> m_CurrentTime;
+
+    std::vector<int> m_Solution;
+    size_t m_CurrentSolutionIdx;
+};
+
+
+
+optimizer\src\problem\problems\ECVRPTW\CECVRPTWTemplate.h
+=============
+#pragma once
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cfloat>
+#include <cstdint>
+#include "ENodeType.h"
+
+constexpr int VEHICLE_DELIMITER = INT32_MAX;
+constexpr int DEPOT_CITY_ID = 0;
+
+struct SCityECVRPTW
+{
+    SCityECVRPTW(const int& id
+        , const std::string& strId
+        , const ENodeType type
+        , const float& x
+        , const float& y
+        , const int& demand
+        , const float& readyTime
+        , const float& dueTime
+        , const float& serviceTime
+    );
+
+    int m_ID;
+    std::string m_StrID;
+    ENodeType m_Type;
+    float m_PosX, m_PosY;
+    int m_Demand;
+    float m_ReadyTime, m_DueTime, m_ServiceTime;
+};
+
+struct SDistanceInfo
+{
+    float m_Distance;
+    float m_TravelTime;
+    float m_FuelConsumption;
+};
+
+class CECVRPTWTemplate
+{
+public:
+    void Clear();
+    const std::string& GetFileName() const { return m_FileName; }
+    void SetFileName(const std::string& fileName) { m_FileName = fileName; }
+    void SetData(std::vector<SCityECVRPTW>& cities
+        , int capacity
+        , float tankCapacity
+        , float fuelConsumptionRate
+        , float refuelingRate
+        , float averageVelocity
+        , std::vector<size_t>& chargingStationIndexes
+        , std::vector<size_t>& depotIndexes
+        , std::vector<size_t>& customerIndexes
+        , int vehicleCount
+    );
+
+    const std::vector<SCityECVRPTW>& GetCities() const { return m_Cities; }
+    const std::vector<std::vector<SDistanceInfo>>& GetDistInfoMtx() const { return m_DistanceInfoMatrix; }
+    const std::vector<float>& GetMinDistVec() const { return m_MinDistanceVec; }
+    const std::vector<size_t>& GetDepots() const { return m_DepotIndexes; }
+    const std::vector<size_t>& GetChargingStations() const { return m_ChargingStationIndexes; }
+    const std::vector<size_t>& GetCustomers() const { return m_CustomerIndexes; }
+
+    int GetCapacity() const { return m_Capacity; }
+    float GetTankCapcity() const { return m_TankCapacity; }
+    float GetFuelConsumptionRate() const { return m_FuelConsumptionRate; }
+    float GetRefuelingRate() const { return m_RefuelingRate; }
+    float GetAverageVelociy() const { return m_AverageVelocity; }
+    int GetVehicleCount() const { return m_VehicleCount; }
+
+    size_t GetCitiesSize() const { return m_Cities.size(); }
+
+    float GetMinDistance() const;
+    float GetMaxDistance() const;
+    float GetMaxTimeService() const;
+    float GetMaxDueTime() const { return m_Cities[0].m_DueTime; }
+
+    float GetRequiredFuel(size_t cityIdx, size_t nextCityIdx) const;
+    size_t GetNearestDepotIdx(size_t cityIdx) const;
+    size_t GetNearestChargingStationIdx(size_t cityIdx) const;
+
+    bool Validate() const;
+
+private:
+    void CalculateContextData();
+
+    std::string m_FileName;
+
+    // File data
+    std::vector<SCityECVRPTW> m_Cities;
+    std::vector<size_t> m_DepotIndexes;
+    std::vector<size_t> m_ChargingStationIndexes;
+    std::vector<size_t> m_CustomerIndexes;
+    int m_Capacity;
+    float m_TankCapacity;
+    float m_FuelConsumptionRate;
+    float m_RefuelingRate;
+    float m_AverageVelocity;
+    int m_VehicleCount;
+
+    // Context data
+    std::vector<std::vector<SDistanceInfo>> m_DistanceInfoMatrix;
+    std::vector<float> m_MinDistanceVec;
+};
+
+
+optimizer\src\problem\problems\ECVRPTW\ENodeType.h
+=============
+#pragma once
+
+enum class ENodeType : char {
+	Depot = 'd',
+	ChargingStation = 'f',
+	Customer = 'c',
+};
+
+optimizer\src\problem\problems\MSRCPSP\CMSRCPSP_TA.h
+=============
+#pragma once
+
+#include "CResource.h"
+#include "CScheduler.h"
+#include "../../AProblem.h"
+#include "../../../method/individual/SGenotype.h"
+
+class CMSRCPSP_TA : public AProblem
+{
+public:
+    explicit CMSRCPSP_TA(CScheduler &scheduler, size_t objCount);
+    ~CMSRCPSP_TA() override = default;
+
+    SProblemEncoding& GetProblemEncoding() override;
+    void Evaluate(AIndividual& individual) override;
+    void LogSolution(AIndividual& individual) override;
+    void LogAdditionalData() override {};
+
+    // MSRCPSP specific functions
+    float FindBestGeneValueCostWise(size_t geneIdx) const;
+    std::vector<size_t> FindNumberOfResourcesUse(const std::vector<float>& solution) const;
+    float FindBestGeneValueUsageWise(size_t geneIdx, const std::vector<size_t>& currentResourcesUsage) const;
+
+private:
+    void CreateProblemEncoding();
+
+    size_t m_ObjCount;
+    std::vector<std::vector<TResourceID>> m_CapableResources;
+    std::vector<size_t> m_UpperBounds;
+    SProblemEncoding m_ProblemEncoding;
+    std::vector<float> m_MaxObjectiveValues;
+    std::vector<float> m_MinObjectiveValues;
+
+    CScheduler m_Scheduler;
+};
+
+optimizer\src\problem\problems\MSRCPSP\CMSRCPSP_TO.h
+=============
+#pragma once
+
+#include "CResource.h"
+#include "CScheduler.h"
+#include "../../AProblem.h"
+#include "../../../method/individual/SGenotype.h"
+
+class CMSRCPSP_TO : public AProblem
+{
+public:
+    explicit CMSRCPSP_TO(CScheduler& scheduler, size_t objCount);
+    ~CMSRCPSP_TO() override = default;
+
+    SProblemEncoding& GetProblemEncoding() override;
+    void Evaluate(AIndividual& individual) override;
+    void LogSolution(AIndividual& individual) override;
+    void LogAdditionalData() override {};
+private:
+    void CreateProblemEncoding();
+
+    size_t m_ObjCount;
+    std::vector<std::vector<TResourceID>> m_CapableResources;
+    SProblemEncoding m_ProblemEncoding;
+    std::vector<float> m_MaxObjectiveValues;
+    std::vector<float> m_MinObjectiveValues;
+
+    CScheduler m_Scheduler;
+};
+
+
+optimizer\src\problem\problems\MSRCPSP\CResource.h
+=============
+#pragma once
+
+#include <stdint.h>
+#include <vector>
+#include "CSkill.h"
+
+using TTime = int16_t;
+#define TIME_MAX INT16_MAX;
+using TResourceID = int16_t;
+
+class CResource
+{
+public:
+
+    CResource(TResourceID id, float salary, const std::vector<SSkill> &skills);
+
+    TResourceID GetResourceID() const
+    { return m_ID; }
+
+    TTime GetFinish() const
+    { return m_Finish; }
+
+    void SetFinish(TTime finish)
+    { m_Finish = finish; }
+
+    TTime GetWorkingTime() const
+    { return m_WorkingTime; }
+
+    void SetWorkingTime(TTime workingTime)
+    { m_WorkingTime = workingTime; }
+
+    void AddWorkingTime(TTime workingTime)
+    { m_WorkingTime += workingTime; }
+
+    float GetSalary() const
+    { return m_Salary; }
+
+    const std::vector<SSkill> &GetSkills() const
+    { return m_Skills; }
+
+    // Returns if resource skill at this or higher level
+    bool HasSkill(const SSkill &querySkill) const;
+
+    // Returns false if skill is not available
+    bool GetSkillLevel(TSkillType skillType, TSkillLevel &skillLevel) const;
+
+private:
+    TResourceID m_ID;
+    float m_Salary;
+    std::vector<SSkill> m_Skills;
+    TTime m_Finish;
+    TTime m_WorkingTime;
+};
+
+
+optimizer\src\problem\problems\MSRCPSP\CScheduler.h
+=============
+#pragma once
+
+#include <string>
+#include <stack>
+#include "CTask.h"
+#include "method/individual/AIndividual.h"
+
+class CScheduler
+{
+public:
+    const std::vector<std::vector<TResourceID>>& GetCapableResources() const
+    { return m_CapableResources; };
+
+    const std::vector<CTask> &GetTasks() const
+    { return m_Tasks; };
+
+    const std::vector<CResource> &GetResources() const
+    { return m_Resources; };
+
+    void SetInstanceName(const std::string& instanceName);
+    void SetCapableResources(const std::vector<std::vector<TResourceID>>& capableResources);
+    void SetTasks(const std::vector<CTask> &tasks);
+    void SetResources(const std::vector<CResource> &resources);
+
+    const CTask* GetTaskById(TTaskID taskId) const;
+    const CResource* GetResourceById(TResourceID resourceId) const;
+
+    void Assign(size_t taskIndex, TResourceID resourceId);
+    void BuildTimestamps_TA();
+    void BuildTimestamps_TO(std::vector<int>& tasksIndexes);
+
+    void BuildTimestampForTask_TA(CTask &task);
+    void BuildTimestampForTask_TO(size_t taskIndex);
+
+    void Clear();
+    void Reset();
+
+    float EvaluateDuration();
+    float EvaluateCost();
+    float EvaluateAvgCashFlowDev();
+    float EvaluateSkillOveruse();
+    float EvaluateAvgUseOfResTime();
+    void GetCapableResources(const CTask &task, std::vector<TResourceID> &resourceIds) const;
+    TTime GetEarliestTime(const CTask &task) const;
+
+    std::string GetInstanceName() const;
+    float GetMaxDuration() const;
+    float GetMinDuration() const;
+    float GetMaxCost() const;
+    float GetMinCost() const;
+    float GetMaxAvgCashFlowDev() const;
+    float GetMinAvgCashFlowDev() const;
+    float GetMaxSkillOveruse() const;
+    float GetMinSkillOveruse() const;
+    float GetMaxAvgUseOfResTime() const;
+    float GetMinAvgUseOfResTime() const;
+
+private:
+    std::string m_InstanceName;
+    std::vector<std::vector<TResourceID>> m_CapableResources;
+    std::vector<CTask> m_Tasks;
+    std::vector<CResource> m_Resources;
+
+    TTime GetBestCapableResourceId(size_t taskIndex, TTime earliestTime);
+    std::vector<size_t> GetTasksIndexes(std::vector<float>& priorities);
+    void AssignTask(size_t taskIndex);
+};
+
+
+optimizer\src\problem\problems\MSRCPSP\CSkill.h
+=============
+#pragma once
+
+#include <cstdint>
+#include <cmath>
+#include <cfloat>
+
+using TSkillType = uint8_t;
+using TSkillLevel = uint8_t;
+
+struct SSkill
+{
+    TSkillType m_TypeID;
+    TSkillLevel m_Level;
+
+    SSkill();
+    SSkill(TSkillType typeID, TSkillLevel level);
+};
+
+
+optimizer\src\problem\problems\MSRCPSP\CTask.h
+=============
+#pragma once
+
+#include <cstdint>
+#include "CResource.h"
+
+using TTaskID = int16_t;
+
+class CTask
+{
+public:
+
+    CTask(TTaskID id, const std::vector<SSkill> &skills, TTime duration, const std::vector<TTaskID> &predecessors);
+
+    TTime GetStart() const
+    { return m_Start; }
+
+    void SetStart(TTime startTime)
+    { m_Start = startTime; }
+
+    TTime GetDuration() const
+    { return m_Duration; }
+
+    TResourceID GetResourceID() const
+    { return m_ResourceID; }
+
+    void SetResourceID(TResourceID resourceID)
+    { m_ResourceID = resourceID; }
+
+    bool GetHasSuccessors() const
+    { return m_HasSuccessors; }
+
+    void SetHasSuccessors(bool hasSuccessors)
+    { m_HasSuccessors = hasSuccessors; }
+
+    const std::vector<TTaskID> &GetPredecessors() const
+    { return m_Predecessors; }
+
+    TTime GetExpectedFinish() const
+    { return m_Start + m_Duration; }
+
+    bool CanBeExecutedBy(const CResource &resource) const;
+
+    const std::vector<SSkill> &GetRequiredSkills() const
+    { return m_RequiredSkills; }
+
+private:
+
+    TTaskID m_ID;
+    std::vector<SSkill> m_RequiredSkills;
+    TTime m_Duration;
+    TTime m_Start;
+    std::vector<TTaskID> m_Predecessors;
+    TResourceID m_ResourceID;
+    bool m_HasSuccessors;
+};
+
+
+optimizer\src\problem\problems\TSP\CCity.h
+=============
+
+#pragma once
+
+class CCity
+{
+public:
+    CCity(int id, float x, float y) {
+        m_ID = id;
+        m_PosX = x;
+        m_PosY = y;
+    }
+
+    int m_ID;
+    float m_PosX, m_PosY;
+};
+
+
+optimizer\src\problem\problems\TSP\CTSP.h
+=============
+
+#include "../../SProblemEncoding.h"
+#include "../../../method/individual/SGenotype.h"
+#include "../../AProblem.h"
+#include "CTSPTemplate.h"
+
+class CTSP : public AProblem {
+private:
+    CTSPTemplate &m_CTSPTemplate;
+    SProblemEncoding m_ProblemEncoding;
+
+public:
+    CTSP(CTSPTemplate &tspTemplate) : m_CTSPTemplate(tspTemplate) {
+        CreateProblemEncoding();
+    }
+
+    SProblemEncoding &GetProblemEncoding() {
+        return m_ProblemEncoding;
+    }
+
+    void Evaluate(AIndividual& individual) {
+        // Calculate the total distance of the tour
+        float totalDistance = 0.f;
+        size_t citiesSize = m_CTSPTemplate.GetCitiesSize();
+        auto &distMtx = m_CTSPTemplate.GetDistMtx();
+
+        for (size_t i = 0; i < citiesSize; ++i) {
+            size_t cityIdx = individual.m_Genotype.m_IntGenotype[i];
+            size_t nextCityIdx = individual.m_Genotype.m_IntGenotype[(i + 1) % citiesSize];
+            totalDistance += distMtx[cityIdx][nextCityIdx];
+        }
+
+        individual.m_Evaluation = { totalDistance };
+        individual.m_NormalizedEvaluation = { totalDistance / m_CTSPTemplate.m_MaxDistance };
+    }
+
+    void LogSolution(AIndividual& individual) override {
+        
+    }
+
+    void LogAdditionalData() override {};
+
+    void CreateProblemEncoding() {
+        size_t citiesSize = m_CTSPTemplate.GetCitiesSize();
+
+        SEncodingSection citiesSection = SEncodingSection {
+                std::vector<SEncodingDescriptor>(citiesSize, SEncodingDescriptor{
+                        (float) 0, (float) (citiesSize - 1)
+                }),
+                EEncodingType::PERMUTATION
+        };
+
+        m_ProblemEncoding = SProblemEncoding{1, {citiesSection}, m_CTSPTemplate.GetDistMtx()};
+    }
+};
+
+optimizer\src\problem\problems\TSP\CTSPTemplate.h
+=============
+#include <vector>
+#include <cmath>
+#include "CCity.h"
+
+class CTSPTemplate {
+public:
+    std::vector<CCity> m_Cities;
+    std::vector<std::vector<float>> m_DistanceMatrix;
+    float m_MaxDistance = 0;
+
+    void CalculateDistanceMatrix() {
+        size_t numCities = m_Cities.size();
+        m_DistanceMatrix.resize(numCities, std::vector<float>(numCities, 0.f));
+
+        for (size_t i = 0; i < numCities; i++) {
+            for (size_t j = 0; j < numCities; j++) {
+                if (i != j) {
+                    m_DistanceMatrix[i][j] = CalculateDistance(m_Cities[i], m_Cities[j]);
+                }
+            }
+        }
+    }
+
+    float CalculateDistance(const CCity &city1, const CCity &city2) {
+        return std::sqrt(std::pow(city1.m_PosX - city2.m_PosX, 2) + std::pow(city1.m_PosY - city2.m_PosY, 2));
+    }
+    
+    void SetCities(std::vector<CCity> &cities) {
+        m_Cities = cities;
+        CalculateDistanceMatrix();
+    }
+
+    const std::vector<CCity>& GetCities() const {
+        return m_Cities;
+    }
+
+    size_t GetCitiesSize() const {
+        return m_Cities.size();
+    }
+
+    const std::vector<std::vector<float>>& GetDistMtx() const {
+        return m_DistanceMatrix;
+    }
+
+    void CalculateMaxDistance() {
+        for (const auto& row : m_DistanceMatrix) {
+            for (float dist : row) {
+                m_MaxDistance = std::max(m_MaxDistance, dist);
+            }
+        }
+        
+        m_MaxDistance *= m_Cities.size();
+    }
+};
+
+optimizer\src\problem\problems\TTP\CTTP1.h
+=============
+#pragma once
+
+#include "CTTP2.h"
+
+class CTTP1 : public CTTP2
+{
+public:
+    explicit CTTP1(CTTP2 &ttp2);
+    ~CTTP1() override = default;
+    void Evaluate(AIndividual& individual) override;
+};
+
+optimizer\src\problem\problems\TTP\CTTP2.h
+=============
+#pragma once
+
+#include "CTTPTemplate.h"
+#include "../../AProblem.h"
+#include "../../../method/individual/SGenotype.h"
+
+class CTTP2 : public AProblem
+{
+public:
+    explicit CTTP2(CTTPTemplate &ttpBase);
+    ~CTTP2() override = default;
+
+    SProblemEncoding &GetProblemEncoding() override;
+    void Evaluate(AIndividual& individual) override;
+    void LogSolution(AIndividual& individual) override;
+    void LogAdditionalData() override {};
+
+protected:
+
+    std::vector<std::vector<size_t>> m_CityItems;
+    std::vector<size_t> m_UpperBounds;
+    SProblemEncoding m_ProblemEncoding;
+    CTTPTemplate &m_TTPTemplate;
+    std::vector<float> m_MaxObjectiveValues;
+    std::vector<float> m_MinObjectiveValues;
+
+private:
+    void CreateProblemEncoding();
+};
+
+optimizer\src\problem\problems\TTP\CTTPTemplate.h
+=============
+#pragma once
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+#define USE_EOK 0
+
+struct SCity
+{
+    SCity(const int &id, const float &x, const float &y);
+
+    int m_ID;
+    float m_PosX, m_PosY;
+};
+
+struct SItem
+{
+    SItem(const int &id, const int &profit, const int &weight, const int &nodeId);
+
+    int m_ID, m_Profit, m_Weight, m_NodeId;
+};
+
+class CTTPTemplate
+{
+public:
+
+    void Clear();
+
+    const std::string &GetFileName() const
+    { return m_FileName; }
+
+    void SetFileName(const std::string &fileName)
+    { m_FileName = fileName; }
+
+    void SetData(const std::vector<SCity> &cities, const std::vector<SItem> &items, int capacity, float minSpeed,
+                 float maxSpeed, float rentingRatio);
+
+    const std::vector<SCity> &GetCities() const
+    { return m_Cities; }
+
+    const std::vector<SItem> &GetItems() const
+    { return m_Items; }
+
+    const std::vector<std::vector<float>> &GetDistMtx() const
+    { return m_DistanceMatrix; }
+
+    const std::vector<float> &GetMinDistVec() const
+    { return m_MinDistanceVec; }
+
+    const std::vector<std::vector<size_t>> &GetCityItems() const
+    { return m_CityItems; }
+
+    const std::vector<size_t> &GetProfitRatioSortedItems() const
+    { return m_ProfitRatioSortedItems; }
+
+    int GetCapacity() const
+    { return m_Capacity; }
+
+    float GetMinSpeed() const
+    { return m_MinSpeed; }
+
+    float GetMaxSpeed() const
+    { return m_MaxSpeed; }
+
+    float GetRentingRatio() const
+    { return m_RentingRatio; }
+
+    size_t GetCitiesSize() const
+    { return m_Cities.size(); }
+
+    size_t GetItemsSize() const
+    { return m_Items.size(); }
+
+    float GetMaxTravelTime() const;
+    float GetMaxProfit() const;
+
+    float GetMinTravelTime() const;
+    float GetMinProfit() const;
+
+private:
+
+    float CalculateMaxDistance() const;
+    float CalculateMinDistance() const;
+    void CalculateContextData();
+
+    std::string m_FileName;
+
+    // File data
+    std::vector<SCity> m_Cities;
+    std::vector<SItem> m_Items;
+    std::vector<size_t> m_ProfitRatioSortedItems;
+    int m_Capacity;
+    float m_MinSpeed;
+    float m_MaxSpeed;
+    float m_RentingRatio;
+
+    // Context data
+    std::vector<std::vector<float>> m_DistanceMatrix;
+    std::vector<float> m_MinDistanceVec;
+    std::vector<std::vector<size_t>> m_CityItems;
+};
+
+
+optimizer\src\problem\problems\TTP\TTPJavaEvalData.h
+=============
+#pragma once
+
+#include <map>
+#include <string>
+
+// Values rewritten from Java implementation
+std::map<std::string, float> g_TTPMaxProfit =
+        {
+                {"eil51_n50_bounded-strongly-corr_01",   7458.f},
+                {"eil51_n50_uncorr_01",                  8286.f},
+                {"eil51_n50_uncorr-similar-weights_01",  4599.f},
+
+                {"eil51_n150_bounded-strongly-corr_01",  21701.f},
+                {"eil51_n150_uncorr_01",                 24109.f},
+                {"eil51_n150_uncorr-similar-weights_01", 13164.f},
+
+                {"eil51_n250_bounded-strongly-corr_01",  37596.f},
+                {"eil51_n250_uncorr_01",                 40499.f},
+                {"eil51_n250_uncorr-similar-weights_01", 21648.f},
+
+                {"eil51_n500_bounded-strongly-corr_01",  73998.f},
+                {"eil51_n500_uncorr_01",                 84882.f},
+                {"eil51_n500_uncorr-similar-weights_01", 43496.f},
+        };
+
+optimizer\src\utils\dataStructures\CCSV.h
+=============
+#pragma once
+
+#include <vector>
+
+
+#include <ostream>
+#include <fstream>
+#include <algorithm>
+#include <sstream>
+
+template <typename T>
+class CCSV
+{
+public:
+    CCSV(size_t columnsCount)
+        : m_ColumnsCount(columnsCount)
+    {}
+
+    // TODO - add column count validation
+    void AddRow(const std::vector<T>& newRow) { m_Data.push_back(newRow); }
+    void AddRow(std::vector<T>&& newRow) { m_Data.push_back(newRow); }
+
+    std::ostringstream ToStringStream()
+    {
+        std::ostringstream ostringstream;
+        ToCSV(ostringstream, m_Data);
+        return ostringstream;
+    }
+
+    static void ToCSV(std::ostringstream& ostringstream, const std::vector<std::vector<T>>& csvData)
+    {
+        for (const auto& row: csvData)
+        {
+            for (size_t i = 0; i < row.size(); ++i)
+            {
+                ostringstream << row[i];
+                if (i < row.size() - 1)
+                {
+                    ostringstream << ";";
+                }
+            }
+            ostringstream << "\n";
+        }
+    }
+
+private:
+    size_t m_ColumnsCount;
+    std::vector<std::vector<T>> m_Data;
+};
+
+optimizer\src\utils\fileReader\CReadUtils.h
+=============
+#pragma once
+
+#include <string>
+#include <vector>
+#include <regex>
+
+class CReadUtils
+{
+public:
+    static bool fileExists(const char *path);
+    static bool ReadKeyValueString(const std::string &line, const std::string &delimiter, std::string &keyString, std::string &valueString);
+
+    static bool GotoReadSizeByKey(std::ifstream &fileStream, const std::string &lineKey, const std::string &delimiter, size_t &val);
+    static bool GotoReadIntegerByKey(std::ifstream &fileStream, const std::string &lineKey, const std::string &delimiter, int &val);
+    static bool GotoReadFloatByKey(std::ifstream &fileStream, const std::string &lineKey, const std::string &delimiter, float &val);
+    static bool GotoReadStringByKey(std::ifstream &fileStream, const std::string &lineKey, const std::string &delimiter, std::string &val);
+    static bool GoToReadFloatByKeyAndRegex(std::ifstream& fileStream, const std::string& lineKey, const std::regex& regex, float &val);
+
+    static bool GotoLineByKey(std::ifstream &fileStream, const std::string &lineKey, std::string &line);
+
+    static bool ReadSizeByKey(const std::string &line, const std::string &lineKey, const std::string &delimiter, size_t &val);
+    static bool ReadIntegerByKey(const std::string &line, const std::string &lineKey, const std::string &delimiter, int &val);
+    static bool ReadFloatByKey(const std::string &line, const std::string &lineKey, const std::string &delimiter, float &val);
+
+    static bool ReadStringByKey(const std::string &line, const std::string &lineKey, const std::string &delimiter, std::string &val);
+
+
+    static void ReadWeights(const std::string &rawWeightsString, std::vector<float> &objectiveWeights);
+
+    static std::vector<std::string> SplitLine(const std::string& lineToSplit);
+};
+
+optimizer\src\utils\logger\CExperimentLogger.h
+=============
+#pragma once
+
+#include <vector>
+#include "../../problem/problems/MSRCPSP/CScheduler.h"
+#include "../../method/individual/AIndividual.h"
+#include <string>
+
+class CExperimentLogger
+{
+public:
+    static char* m_OutputDirPath;
+    static std::string m_OutputDataPathPrefix;
+
+    static void CreateOutputDataPrefix();
+    static void AddLine(const char* line);
+    static void LogData();
+    static void LogResult(const char* result);
+    static void LogResult(const char* result, const char* fileName);
+    static void LogProgress(const float progress);
+    static bool WriteSchedulerToFile(const CScheduler& schedule, const AIndividual& solution);
+private:
+    static size_t m_BufferSize;
+    static std::vector<std::string> m_Data;
+    static int m_LastProgressLogged;
+    static void OpenFileForWriting(const char* filePath, std::ofstream& outFile);
+};
+
+
+optimizer\src\utils\logger\ErrorUtils.h
+=============
+#pragma once
+
+#include <string>
+
+class ErrorUtils
+{
+public:
+    static void LowerThanZeroI(std::string objectName, std::string paramName, int paramValue);
+    static void LowerThanZeroF(std::string objectName, std::string paramName, float paramValue);
+    static void OutOfScopeF(std::string objectName, std::string paramName, float paramValue);
+};
+
+optimizer\src\utils\random\CRandom.h
+=============
+#pragma once
+
+#include <random>
+#include <iterator>
+
+class CRandom
+{
+public:
+    static void SetSeed(unsigned int seed);
+    static int GetBool();
+    static int GetInt(int min, int max);
+    static int GetWeightedInt(const std::vector<float>& weights);
+    static float GetFloat(float min, float max);
+    static void Shuffle(int start, int end, std::vector<int> &vector);
+
+private:
+    static std::mt19937 rng;
+};
+

@@ -80,7 +80,10 @@ void CSOExperimentUtils::LogResultData(SSOIndividual& best, AProblem& problem)
 {
     CExperimentLogger::LogData();
 
+    std::string header = "Fitness;NormalizedEvaluation";
     std::string resultString = BestToCSVString(best);
+
+    //CExperimentLogger::LogResult(header.c_str());
     CExperimentLogger::LogResult(resultString.c_str());
     problem.LogSolution(best);
 }

@@ -1,0 +1,12 @@
+{
+  "saved_paths": {
+    "imopse_exe": "C:\\Users\\user\\Desktop\\iMOPSE\\optimizer\\out\\build\\x64-Debug\\imopse.exe",
+    "method_config": "C:\\Users\\user\\Desktop\\iMOPSE\\configurations\\methods\\ACO\\ACO_CVRP.cfg",
+    "problem_name": "CVRP",
+    "problem_instance": "C:\\Users\\user\\Desktop\\iMOPSE\\configurations\\problems\\CVRP\\A-n32-k5.vrp",
+    "output_dir": "C:\\Users\\user\\Desktop\\iMOPSE\\optimizer\\pythonRunner",
+    "exec_count": 1,
+    "seed": 0
+  },
+  "last_browsed_path": "C:\\Users\\user\\Desktop\\iMOPSE\\optimizer\\pythonRunner"
+}

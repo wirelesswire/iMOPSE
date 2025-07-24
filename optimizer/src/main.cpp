@@ -5,6 +5,8 @@
 #include "utils/logger/CExperimentLogger.h" // Custom header for an experiment logger utility class
 #include "utils/fileReader/CReadUtils.h"  // Custom header for a file reader utility class
 
+#define DEBUG 1 // Define DEBUG as 0 to disable debug output; set to 1 to enable
+
 static const int MIN_REQUIRED_ARGS = 4; // Minimum number of arguments required for the program
 static const int OPTIMIZER_CONFIG_INDEX = 1; // Index in argv for optimizer configuration file
 static const int PROBLEM_NAME_INDEX = 2; // Index in argv for problem name
@@ -17,8 +19,19 @@ static const int DEFAULT_EXECUTIONS_NUMBER = 1; // Default number of executions 
 
 void showErrorAndExit(const char *message, const char *detail = ""); // Function prototype for error handling
 
+
+
 int main(int argc, char *argv[])
 {
+
+#if DEBUG
+    for (int i = 0; i < argc; ++i) // Print all command line arguments for debugging
+    {
+        std::cout << "Argument " << i << ": " << argv[i] << std::endl;
+    }
+#endif // DEBUG
+
+   
     // Check for minimum number of arguments
     if (argc < MIN_REQUIRED_ARGS)
     {

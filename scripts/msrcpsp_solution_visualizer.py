@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-solution_file_path = '../optimizer/experiments/GA/run_0/best_solution.sol' # Input path to solution file
+solution_file_path = 'C:\\Users\\user\\Desktop\\iMOPSE\\optimizer\\experiments\\GA\\run_0\\best_solution.sol' # Input path to solution file
 
 def read_and_format_data(filename):
     all_tasks = []

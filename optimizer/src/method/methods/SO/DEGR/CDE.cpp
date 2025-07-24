@@ -4,6 +4,7 @@
 #include "../utils/experiment/CSOExperimentUtils.h"
 #include "../utils/aggregatedFitness/CAggregatedFitness.h"
 #include "../../../../utils/logger/ErrorUtils.h"
+#include <numeric>
 
 CDE::CDE(
         std::vector<float>& objectiveWeights,
