@@ -1,6 +1,15 @@
 #include "CUniformCX.h"
 #include "../../../../utils/random/CRandom.h"
 
+
+/// <summary>
+/// this class implements uniform crossover operator.
+/// </summary>
+/// <param name="problemEncoding"></param>
+/// <param name="firstParent"></param>
+/// <param name="secondParent"></param>
+/// <param name="firstChild"></param>
+/// <param name="secondChild"></param>
 void CUniformCX::Crossover(const SProblemEncoding& problemEncoding, AIndividual &firstParent, AIndividual &secondParent,
                            AIndividual &firstChild,
                            AIndividual &secondChild)

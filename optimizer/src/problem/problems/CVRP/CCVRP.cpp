@@ -18,6 +18,11 @@ SProblemEncoding &CCVRP::GetProblemEncoding() {
     return m_ProblemEncoding;
 }
 
+/// <summary>
+/// returns the index of the nearest depot for a given city index.
+/// </summary>
+/// <param name="cityIdx"></param>
+/// <returns></returns>
 size_t CCVRP::GetNearestDepotIdx(const size_t cityIdx) {
     float minDist = FLT_MAX;
     size_t chosenIdx;
@@ -41,6 +46,16 @@ size_t CCVRP::GetNearestDepotIdx(const size_t cityIdx) {
     return chosenIdx;
 }
 
+/// <summary>
+/// receives an individual and evaluates its fitness based on the CVRP problem.
+/// fitness is calculated as the total distance traveled by the vehicles to serve all cities, considering the capacity constraints.
+/// it is calculated by iterating through the cities in the individual's genotype, checking if the current load allows serving the next city.
+/// if not, it finds the nearest depot, adds the distance to the depot, and resets the current load.
+/// the total distance is accumulated and stored in the individual's evaluation.
+/// returns void because the evaluation is directly applied to the individual passed as a parameter.
+/// ths individual after evaluation will have its m_Evaluation and m_NormalizedEvaluation fields updated with the calculated distance and normalized values respectively.
+/// </summary>
+/// <param name="individual"></param>
 void CCVRP::Evaluate(AIndividual& individual) {
     // Build solution
     auto &distMtx = m_CVRPTemplate.GetDistMtx();
@@ -85,6 +100,8 @@ void CCVRP::Evaluate(AIndividual& individual) {
 void CCVRP::CreateProblemEncoding() {
     size_t citiesSize = m_CVRPTemplate.GetCitiesSize();
 
+
+	// Create encoding sections
     SEncodingSection citiesSection = SEncodingSection
             {
                     // city indices <0, n-1>

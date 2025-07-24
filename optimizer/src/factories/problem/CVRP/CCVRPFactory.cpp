@@ -22,6 +22,11 @@ void CCVRPFactory::DeleteObjects() {
     delete cvrpTemplate;
 }
 
+/// <summary>
+/// this function reads a CVRP problem definition from a file and creates a CCVRPTemplate object.
+/// </summary>
+/// <param name="problemDefinitionPath"></param>
+/// <returns></returns>
 CCVRPTemplate *CCVRPFactory::ReadCVRPTemplate(const char *problemDefinitionPath) {
     auto *result = new CCVRPTemplate();
 

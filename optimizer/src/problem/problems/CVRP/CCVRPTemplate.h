@@ -14,6 +14,8 @@ struct SCityCVRP {
     int m_demand;
 };
 
+
+//cumulative cvrp - minimize time to client not min distance 
 class CCVRPTemplate {
 public:
 
@@ -41,6 +43,7 @@ private:
     std::string m_FileName;
 
     // File data
+
     std::vector<SCityCVRP> m_Cities;
     std::vector<size_t> m_DepotIndexes;
     int m_Capacity;

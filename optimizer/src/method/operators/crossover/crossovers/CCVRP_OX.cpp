@@ -3,17 +3,23 @@
 #include "CCVRP_OX.h"
 #include <climits>
 
+/// <summary>
+///  the function fixes the child individual by replacing duplicate genes with missing ones.
+/// 
+/// </summary>
+/// <param name="child"></param>
 void CCVRP_OX::FixChild(AIndividual &child)
 {
     auto &childGenes = child.m_Genotype.m_IntGenotype;
     auto size = child.m_Genotype.m_IntGenotype.size();
 
+	// Create a vector of all possible genes (0 to size - 1)
     std::vector<int> all_genes(size);
     for (int i = 0; i < child.m_Genotype.m_IntGenotype.size(); i++)
     {
         all_genes[i] = i;
     }
-
+	// Find missing genes in the child
     std::vector<int> missing_genes;
     for (auto gene: all_genes)
     {
@@ -23,6 +29,7 @@ void CCVRP_OX::FixChild(AIndividual &child)
         }
     }
 
+	// Replace duplicate genes in the child with missing genes
     int ii = 0;
     for (size_t i = 0; i < childGenes.size(); ++i)
     {
@@ -40,7 +47,7 @@ void CCVRP_OX::FixChild(AIndividual &child)
             }
         }
     }
-
+	// Find missing genes again after replacement
     missing_genes.clear();
     for (auto gene: all_genes)
     {
@@ -50,10 +57,19 @@ void CCVRP_OX::FixChild(AIndividual &child)
         }
     }
 }
-
+/// <summary>
+///  function performs Order Crossover (OX1) on two parent individuals to produce two child individuals.
+/// </summary> 
+/// <param name="problemEncoding"> this param </param>
+/// <param name="firstParent"></param>
+/// <param name="secondParent"></param>
+/// <param name="firstChild"></param>
+/// <param name="secondChild"></param>
 void CCVRP_OX::Crossover(const SProblemEncoding& problemEncoding, AIndividual &firstParent, AIndividual &secondParent,
                          AIndividual &firstChild, AIndividual &secondChild)
  {
+
+	 //Iterate through each encoding section in the problem encoding 
     for (const SEncodingSection &encoding: problemEncoding.m_Encoding)
     {
         const size_t sectionSize = encoding.m_SectionDescription.size();
@@ -61,6 +77,7 @@ void CCVRP_OX::Crossover(const SProblemEncoding& problemEncoding, AIndividual &f
         const auto &firstParentGenes = firstParent.m_Genotype;
 
         // Order Crossover (OX1)
+		
         if (CRandom::GetFloat(0, 1) < m_CrossoverProbability)
         {
             int a = CRandom::GetInt(0, int(sectionSize) - 1);
@@ -78,11 +95,13 @@ void CCVRP_OX::Crossover(const SProblemEncoding& problemEncoding, AIndividual &f
             // Update remaining positions in children using the order of the other parent
             int firstChildIdx = (b == sectionSize) ? 0 : b;
             int secondChildIdx = (b == sectionSize) ? 0 : b;
-
+			// Iterate through the section size to fill in the remaining genes
             for (int i = 0; i < sectionSize; ++i)
             {
+				// If the index is within the selected range, skip it
                 if (i < a || i >= b)
                 {
+					// Find the next available gene from the second parent for the first child
                     while (std::find(firstChild.m_Genotype.m_IntGenotype.begin(),
                                      firstChild.m_Genotype.m_IntGenotype.end(),
                                      secondParentGenes.m_IntGenotype[firstChildIdx]) !=
@@ -92,7 +111,7 @@ void CCVRP_OX::Crossover(const SProblemEncoding& problemEncoding, AIndividual &f
                     }
                     firstChild.m_Genotype.m_IntGenotype[i] = secondParentGenes.m_IntGenotype[firstChildIdx];
                     firstChildIdx = (firstChildIdx + 1) % sectionSize;
-
+					// Find the next available gene from the first parent for the second child
                     while (std::find(secondChild.m_Genotype.m_IntGenotype.begin(),
                                      secondChild.m_Genotype.m_IntGenotype.end(),
                                      firstParentGenes.m_IntGenotype[secondChildIdx]) !=

@@ -2,6 +2,10 @@
 #include "../../../../utils/random/CRandom.h"
 #include <algorithm>
 
+
+
+
+/// TTP   
 void CTTP_OS_SX::Crossover(const SProblemEncoding& problemEncoding, AIndividual &firstParent, AIndividual &secondParent,
                            AIndividual &firstChild, AIndividual &secondChild)
 {
