@@ -2,6 +2,7 @@
 #include "configMap/CConfigFactory.h"
 #include "methods/SO/GA/CGAFactory.h"
 #include "methods/SO/SA/CSAFactory.h"
+#include "methods/SO/GPHH/CGPHHFactory.h"
 #include "methods/SO/TS/CTSFactory.h"
 #include "methods/MO/NTGA2/CNTGA2Factory.h"
 #include "methods/MO/NTGA2_ALNS/CNTGA2_ALNSFactory.h"
@@ -19,6 +20,8 @@
 #include "methods/MO/BNTGA/CBNTGAFactory.h"
 #include "methods/MO/SPEA2/CSPEA2Factory.h"
 #include "../../utils/fileReader/CReadUtils.h"
+
+
 
 // Static members of CMethodFactory, initialized to nullptr. These will hold various components of an optimization method.
 SConfigMap* CMethodFactory::configMap = nullptr;
@@ -59,6 +62,11 @@ AMethod* CMethodFactory::CreateMethod(
     if (strcmp(methodName.c_str(), "PSO") == 0)
         return CPSOFactory::CreatePSO(configMap, problem, initialization);
 
+
+
+
+
+
     // Create crossover and mutation strategies based on the configuration map.
     crossover = CCrossoverFactory::Create(configMap, "Crossover", problem);
     if (crossover == nullptr) {
@@ -68,6 +76,15 @@ AMethod* CMethodFactory::CreateMethod(
     if (mutation == nullptr) {
         throw std::runtime_error("Error while reading mutation configuration");
     }
+
+    //tu te¿ teoretycznie mo¿e byæ factory do crossovera  i mutacji 
+
+    if (strcmp(methodName.c_str(), "GPHH") == 0)
+        return CGPHHFactory::CreateGPHH(configMap, problem, initialization, crossover, mutation);
+
+
+
+
     
     if (strcmp(methodName.c_str(), "GA") == 0)
         return CGAFactory::CreateGA(configMap, problem, initialization, crossover, mutation);
@@ -121,4 +138,6 @@ void CMethodFactory::DeleteObjects() {
     CSPEA2Factory::DeleteObjects();
     CACOFactory::DeleteObjects();
     CNTGA2_ALNSFactory::DeleteObjects();
+    CGPHHFactory:DeleteObjects();
+
 }
